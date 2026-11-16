@@ -1,0 +1,43 @@
+{
+  "expo": {
+    "name": "Truck Khata",
+    "slug": "truck-khata",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "pk.truckkhata.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#F3F4F0",
+        "foregroundImage": "./assets/android-icon-foreground.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "package": "pk.truckkhata.app",
+      "permissions": []
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-sqlite",
+      "expo-sharing",
+      "expo-font",
+      "expo-asset",
+      "expo-notifications",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "backgroundColor": "#F3F4F0",
+          "imageWidth": 200
+        }
+      ]
+    ],
+    "scheme": "truckkhata"
+  }
+}

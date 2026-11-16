@@ -1,0 +1,278 @@
+/*
+  Truck Khata theme.
+  A soft grey desk with flat white cards, black selected pills, one violet accent for the
+  figure that matters, and pastel tints for status. Green and red only ever mean money
+  received and money owed.
+*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&family=Noto+Nastaliq+Urdu:wght@400;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+    --base:        242 243 245;   /* the desk        #F2F3F5 */
+    --surface:     255 255 255;   /* cards           #FFFFFF */
+    --surface-2:   246 247 249;   /* fields, insets  #F6F7F9 */
+    --line:        235 236 240;   /* hairline        #EBECF0 */
+    --line-strong: 220 222 228;
+    --text-1:       17  19  24;   /* ink             #111318 */
+    --text-2:       91  97 112;   /* secondary       #5B6170 */
+    --text-3:      146 151 164;   /* muted           #9297A4 */
+    --ink:          17  19  24;   /* selected pills and primary buttons */
+    --on-ink:      255 255 255;
+    --brand:        99  82 230;   /* violet accent   #6352E6 */
+    --brand-strong: 79  63 205;   /* #4F3FCD, text on light */
+    --brand-soft:  239 237 255;   /* lavender tint   #EFEDFF */
+    --good:         22 135  74;   /* money received  #16874A */
+    --bad:         220  56  62;   /* money owed      #DC383E */
+    --shadow:       16  24  40;
+
+    --accent-green:  #16A34A;
+    --accent-yellow: #F2B705;
+    --accent-red:    #E5484D;
+    --accent-blue:   #3B82F6;
+    --accent-slate:  #8A90A0;
+    --accent-violet: #6352E6;
+    --c-negative:    #F2994A;
+
+    --radius-card: 24px;
+    --ui-zoom: 1;
+  }
+
+  .dark {
+    color-scheme: dark;
+    --base:         12  13  16;   /* #0C0D10 */
+    --surface:      23  24  28;   /* #17181C */
+    --surface-2:    31  33  38;   /* #1F2126 */
+    --line:         38  40  46;
+    --line-strong:  52  55  63;
+    --text-1:      237 238 241;
+    --text-2:      160 165 176;
+    --text-3:      110 115 128;
+    --ink:         237 238 241;
+    --on-ink:       17  19  24;
+    --brand:       139 124 246;   /* #8B7CF6 */
+    --brand-strong: 167 155 250;
+    --brand-soft:   38  34  66;
+    --good:         74 196 124;
+    --bad:         255 107 112;
+    --shadow:        0   0   0;
+    --accent-violet: #8B7CF6;
+  }
+
+  /* Desktop draws the UI a little smaller so a full ledger fits; text stays readable. */
+  @media (min-width: 1024px) {
+    :root { --ui-zoom: 0.8; }
+  }
+  html { zoom: var(--ui-zoom); }
+
+  *, ::before, ::after { box-sizing: border-box; border-color: rgb(var(--line)); }
+
+  html {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'cv11' 1, 'ss01' 1, 'tnum' 1;
+  }
+
+  body {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    background: rgb(var(--base));
+    color: rgb(var(--text-1));
+    transition: background-color .2s ease, color .2s ease;
+  }
+
+  h1, h2, h3, h4 { font-weight: 500; letter-spacing: -0.015em; }
+
+  ::selection { background: rgb(var(--brand) / 0.2); }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--brand));
+    outline-offset: 2px;
+    border-radius: 8px;
+  }
+  [class*="focus:ring"]:focus-visible { outline: none; }
+}
+
+@layer components {
+  /* Cards: flat white on the grey desk, a breath of shadow, no border in light mode. */
+  .card {
+    background-color: rgb(var(--surface));
+    border-radius: var(--radius-card);
+    box-shadow: 0 1px 2px rgb(var(--shadow) / 0.04), 0 1px 1px rgb(var(--shadow) / 0.02);
+  }
+  .dark .card { box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.05); }
+  .card-hover { transition: box-shadow .18s ease, transform .18s ease; }
+  .card-hover:hover { box-shadow: 0 8px 24px -12px rgb(var(--shadow) / 0.18); }
+  .card-title { letter-spacing: -0.01em; font-weight: 500 !important; }
+
+  /* The one bright card on a screen: the accent violet with two soft rings, like a stamp. */
+  .noir-hero {
+    background: rgb(var(--brand));
+    box-shadow: 0 18px 40px -24px rgb(var(--brand) / 0.7);
+    isolation: isolate;
+  }
+  .noir-hero::before, .noir-hero::after {
+    content: '';
+    position: absolute;
+    border-radius: 9999px;
+    pointer-events: none;
+    z-index: -1;
+  }
+  .noir-hero::before { width: 260px; height: 260px; inset-inline-end: -90px; bottom: -110px; background: rgb(255 255 255 / 0.08); }
+  .noir-hero::after { width: 150px; height: 150px; inset-inline-end: 40px; bottom: 30px; background: rgb(255 255 255 / 0.06); }
+  .noir-hero-btn { background: rgb(255 255 255 / 0.18); color: #fff; transition: background-color .15s ease; }
+  .noir-hero-btn:hover { background: rgb(255 255 255 / 0.28); }
+
+  /* The page's main action. */
+  .noir-cta {
+    background: rgb(var(--brand));
+    color: #fff;
+    transition: background-color .15s ease, transform .1s ease;
+  }
+  .noir-cta:hover { background: rgb(var(--brand-strong)); }
+  .noir-cta:active { transform: scale(0.98); }
+  .dark .noir-cta:hover { background: rgb(var(--brand) / 0.85); }
+
+  /* Fields: soft grey wells that turn white with an accent ring when typing. */
+  .noir-input, .noir-search {
+    background: rgb(var(--surface-2));
+    border: 1px solid transparent;
+    transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease;
+  }
+  .noir-input:hover, .noir-search:hover { border-color: rgb(var(--line-strong)); }
+  .noir-input:focus, .noir-search:focus {
+    background: rgb(var(--surface));
+    border-color: rgb(var(--brand) / 0.55);
+    box-shadow: 0 0 0 4px rgb(var(--brand) / 0.12);
+  }
+  .noir-input--bad { border-color: rgb(var(--bad) / 0.6) !important; }
+
+  /* Table rows: airy, a faint hover. */
+  .noir-thead th { font-weight: 500; }
+  .noir-row { transition: background-color .12s ease; }
+  .noir-row:hover { background: rgb(var(--surface-2)); }
+
+  /* A tinted pill in the colour set by --tone. */
+  .noir-pct {
+    color: var(--tone);
+    background: color-mix(in srgb, var(--tone) 12%, transparent);
+  }
+
+  /* A worked-out value: an inset well, not typed into. */
+  .dotted-panel { background: rgb(var(--surface-2)); }
+
+  .kpi-icon { flex-shrink: 0; }
+
+  .skeleton { position: relative; overflow: hidden; background: rgb(var(--surface-2)); }
+  .skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgb(var(--surface) / 0.6), transparent);
+    animation: shimmer 1.6s infinite;
+  }
+  @media (prefers-reduced-motion: reduce) { .skeleton::after { animation: none; } }
+
+  .scroll-thin { scrollbar-width: thin; scrollbar-color: rgb(var(--line-strong)) transparent; }
+  .scroll-thin::-webkit-scrollbar { width: 8px; height: 8px; }
+  .scroll-thin::-webkit-scrollbar-track { background: transparent; }
+  .scroll-thin::-webkit-scrollbar-thumb { background: rgb(var(--line-strong)); border-radius: 8px; border: 2px solid transparent; background-clip: padding-box; }
+  .no-scrollbar { scrollbar-width: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+}
+
+@layer utilities {
+  .h-viewport { height: calc(100vh / var(--ui-zoom)); }
+  .min-h-viewport { min-height: calc(100vh / var(--ui-zoom)); }
+}
+
+@keyframes shimmer { 100% { transform: translateX(100%); } }
+
+/* Recharts follows the theme. */
+.recharts-cartesian-grid line { stroke: rgb(var(--line)); }
+.recharts-cartesian-axis-tick-value { fill: rgb(var(--text-3)); }
+
+/* The Case # slip: a stamped number, bold everywhere. */
+.case-chip {
+  color: rgb(var(--text-1));
+  background: rgb(var(--surface-2));
+  box-shadow: inset 0 0 0 1px rgb(var(--line-strong));
+}
+.case-chip--hit {
+  color: rgb(var(--brand-strong));
+  background: rgb(var(--brand-soft));
+  box-shadow: inset 0 0 0 1px rgb(var(--brand) / 0.4);
+}
+
+/* Urdu: Nastaliq needs more line height; figures and codes stay in the Latin faces. */
+html[lang='ur'] body { font-family: 'Noto Nastaliq Urdu', 'Inter', system-ui, sans-serif; line-height: 2; }
+html[lang='ur'] .font-display { font-family: 'Noto Nastaliq Urdu', 'Plus Jakarta Sans', sans-serif; letter-spacing: 0; }
+html[lang='ur'] .tabular-nums, html[lang='ur'] .font-mono, html[lang='ur'] input { font-family: 'Inter', system-ui, sans-serif; }
+html[lang='ur'] .case-chip { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+
+/* ── Motion ─────────────────────────────────────────────────────────────
+   One easing curve, short durations. A page arrives once: its title, then its cards
+   rising a few pixels in a short stagger. Dialogs, menus and toasts glide in from
+   where they open. Nothing loops except loading shimmer. */
+:root { --ease: cubic-bezier(0.2, 0.7, 0.2, 1); }
+
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pop-in { from { opacity: 0; transform: translateY(8px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes slide-up { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes drawer-in { from { transform: translateX(-16px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+.page-head { animation: fade-in .35s var(--ease) both; }
+.page-enter :is(.card, .noir-hero) { animation: rise .5s var(--ease) both; }
+.page-enter :is(.card, .noir-hero):nth-child(2) { animation-delay: 50ms; }
+.page-enter :is(.card, .noir-hero):nth-child(3) { animation-delay: 100ms; }
+.page-enter :is(.card, .noir-hero):nth-child(4) { animation-delay: 150ms; }
+.page-enter :is(.card, .noir-hero):nth-child(5) { animation-delay: 200ms; }
+.page-enter :is(.card, .noir-hero):nth-child(n + 6) { animation-delay: 240ms; }
+/* Cards inside cards arrive with their parent, not on their own. */
+.page-enter :is(.card, .noir-hero) :is(.card, .noir-hero) { animation: none; }
+
+.modal-backdrop { animation: fade-in .18s ease both; }
+.modal-panel { animation: pop-in .26s var(--ease) both; }
+.menu-pop { animation: pop-in .18s var(--ease) both; transform-origin: top; }
+.toast-in { animation: slide-up .3s var(--ease) both; }
+.drawer-in { animation: drawer-in .26s var(--ease) both; }
+[dir='rtl'] .drawer-in { animation-name: fade-in; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after { animation-duration: .01ms !important; animation-delay: 0ms !important; transition-duration: .01ms !important; }
+}
+
+/* ── Buttons ───────────────────────────────────────────────────────────── */
+.noir-cta {
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.18), 0 8px 18px -10px rgb(var(--brand) / 0.85);
+}
+.noir-cta:hover { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.2), 0 10px 22px -10px rgb(var(--brand) / 0.95); }
+.btn-press { transition: background-color .15s ease, box-shadow .15s ease, color .15s ease, transform .1s ease; }
+.btn-press:active:not(:disabled) { transform: scale(0.97); }
+/* An arrow inside a button or link nudges forward on hover. */
+.nudge-parent:hover .nudge { transform: translateX(3px); }
+[dir='rtl'] .nudge-parent:hover .nudge { transform: translateX(-3px) rotate(180deg); }
+.nudge { transition: transform .18s var(--ease); }
+
+/* ── Tables ─────────────────────────────────────────────────────────────
+   A row that opens a record shows an accent edge and an arrow while pointed at. */
+.noir-row.is-link:hover { box-shadow: inset 3px 0 0 rgb(var(--brand)); }
+[dir='rtl'] .noir-row.is-link:hover { box-shadow: inset -3px 0 0 rgb(var(--brand)); }
+.noir-row .row-go { opacity: 0; transform: translateX(-4px); transition: opacity .15s ease, transform .18s var(--ease); }
+.noir-row:hover .row-go, .noir-row:focus-visible .row-go { opacity: 1; transform: none; }
+[dir='rtl'] .noir-row .row-go svg { transform: rotate(180deg); }
+
+/* Keycaps for shortcuts. */
+.keycap {
+  display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 6px;
+  border-radius: 7px; font: 500 12px/1 'Inter', system-ui, sans-serif; color: rgb(var(--text-3));
+  background: rgb(var(--surface)); box-shadow: inset 0 0 0 1px rgb(var(--line-strong)), 0 1px 0 rgb(var(--line-strong));
+}

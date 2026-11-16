@@ -1,0 +1,28 @@
+/** Web text for the reports screens. Every key needs its Urdu line in reports.ur.ts. */
+export const reportsEn = {
+  title: 'Reports',
+  month: 'Month',
+  vehicleBox: 'V#',
+  allTrucks: 'All trucks',
+  records: '{{count}} records',
+  monthlyCosts: 'Monthly costs',
+  monthlyCostsNote: 'From the Bill Book',
+  monthlyCostsNone: 'No monthly bills for this truck in this month.',
+  costsTotal: 'Monthly costs total',
+  caseBox: 'Case #',
+  partyBox: 'Broker / party',
+  vendorBox: 'Shop / vendor',
+  routeBox: 'Route',
+  search: {
+    title: 'Search',
+    resultsFor: 'Results for {{term}}',
+    refine: 'Search Case #, V#, broker or shop',
+    cases: 'Cases',
+    casesNone: 'No Case # matches',
+    ada: 'Ada entries',
+    adaNone: 'No Ada entry matches',
+    bills: 'Bills',
+    billsNone: 'No bill matches',
+    start: 'Type a Case #, V#, broker or shop name in the search box at the top.',
+  },
+};

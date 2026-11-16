@@ -1,0 +1,27 @@
+import type { partiesEn } from './parties.en';
+
+export const partiesUr: typeof partiesEn = {
+  search: 'نام یا فون تلاش کریں',
+  active: 'فعال',
+  listTitle: 'تمام بروکرز اور پارٹیاں',
+  archivedTitle: 'آرکائیو بروکرز اور پارٹیاں',
+  noArchived: 'کوئی آرکائیو بروکر یا پارٹی نہیں۔',
+  count: '{{count}} پارٹیاں',
+  newParty: 'نیا بروکر / پارٹی',
+  editParty: 'بروکر / پارٹی میں تبدیلی',
+  details: 'رابطے کی تفصیل',
+  formNote: 'جب آپ اڈا اندراج میں نئے بروکر کا نام محفوظ کرتے ہیں تو بروکر خود بخود بھی شامل ہو جاتا ہے۔',
+  openExisting: '{{name}} کھولیں',
+  printStatement: 'کھاتہ پرنٹ کریں',
+  recordPayment: 'ادائیگی درج کریں',
+  entryEdit: 'دستی اندراج میں تبدیلی',
+  kindPayment: 'وصول شدہ ادائیگی',
+  account: 'کھاتہ',
+  freightNote: 'ان کے اڈا اندراجات پر کل واجب',
+  receivedNote: 'اڈا رجسٹر سے',
+  receivedWithManual: 'اس میں {{amount}} دستی ادائیگیاں شامل ہیں',
+  outstandingNote: 'ابھی وصول کرنا ہے',
+  settled: 'کچھ وصول کرنا باقی نہیں',
+  noCases: 'اس پارٹی کا ابھی کوئی اڈا اندراج نہیں۔',
+  caseFilter: 'کیس نمبر سے چھانٹیں',
+};

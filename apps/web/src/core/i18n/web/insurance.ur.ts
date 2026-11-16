@@ -1,0 +1,28 @@
+import type { insuranceEn } from './insurance.en';
+
+export const insuranceUr: typeof insuranceEn = {
+  search: 'گاڑی نمبر تلاش کریں',
+  all: 'تمام',
+  listTitle: 'تمام پالیسیاں',
+  count: '{{count}} پالیسیاں',
+  newPolicy: 'نئی انشورنس',
+  editPolicy: 'انشورنس میں تبدیلی',
+  daysLeft: 'باقی دن',
+  policySection: 'پالیسی',
+  datesSection: 'تاریخیں',
+  attachmentSection: 'پالیسی کی کاپی',
+  fileHint: 'پالیسی کی تصویر یا پی ڈی ایف',
+  noFile: 'کوئی فائل منسلک نہیں',
+  view: 'دیکھیں',
+  attached: 'منسلک فائل',
+  expiresIn: '{{count}} دن میں ختم ہوگی',
+  expiresToday: 'آج ختم ہو رہی ہے',
+  expiredAgo: '{{count}} دن پہلے ختم ہو چکی',
+  today: 'آج',
+  ago: '{{count}} دن پہلے',
+  noTrips: 'اس ٹرک کا ابھی کوئی ٹرپ نہیں',
+  archivedNote: 'آرکائیو شدہ۔ یہ الرٹ اور مرکزی فہرست میں نہیں آتی۔',
+  summaryTitle: 'حالت',
+  summaryNote: 'آخری تاریخ سے نکالی گئی',
+  pickDates: 'حالت دیکھنے کے لیے آخری تاریخ درج کریں',
+};
