@@ -7,11 +7,11 @@ import { referenceKey } from '../../core/domain/keys';
 import { listBills, type BillView } from '../../core/repo/bills';
 import { useApp, useData } from '../../app/context';
 import { Segmented } from '../../components/shared/Segmented';
-import { Btn, CaseChip, Money, PaidBadge } from '../../ui/bits';
+import { AddButton, Btn, CaseChip, Money, PaidBadge } from '../../ui/bits';
 import { col, downloadCsv, listDocument, listReport, periodText } from '../../ui/exports';
 import { ListTable, type Column } from '../../ui/ListTable';
 import { Page } from '../../ui/Page';
-import { RangeFilter, SearchBox, rangeFor, type RangeChoice } from '../../ui/range';
+import { FilterBox, RangeFilter, SearchBox, rangeFor, type RangeChoice } from '../../ui/range';
 import { PrintButton } from '../../ui/record';
 
 type PaidChoice = 'paid' | 'unpaid' | 'all';
@@ -23,12 +23,15 @@ export default function BillList() {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [paid, setPaid] = useState<PaidChoice>('all');
+  const [vendor, setVendor] = useState('');
+  const [vehicle, setVehicle] = useState('');
+  const [caseNo, setCaseNo] = useState('');
   const [choice, setChoice] = useState<RangeChoice>('all');
   const [custom, setCustom] = useState({ from: null as string | null, to: null as string | null });
   const range = rangeFor(choice, custom);
   const { data: rows, loading } = useData(
-    (db) => listBills(db, { search, range, paid: paid === 'all' ? undefined : paid }),
-    [search, paid, range.from, range.to],
+    (db) => listBills(db, { search, range, vendor: vendor.trim(), vehicle: vehicle.trim(), caseNo: caseNo.trim(), paid: paid === 'all' ? undefined : paid }),
+    [search, paid, vendor, vehicle, caseNo, range.from, range.to],
   );
   const list = rows ?? [];
   const totals = useMemo(() => ({
@@ -67,17 +70,23 @@ export default function BillList() {
       actions={<>
         <PrintButton build={() => listDocument(report(), t('modules.bills'), periodText(range, t), t)} />
         <Btn icon={<FileSpreadsheet size={16} />} onClick={() => downloadCsv(report(), 'bill-book', t)}>{t('web.excel')}</Btn>
+        <AddButton to="/bills/new" label={t('web.shell.addBill')} />
       </>}
       bar={<>
         <Segmented<PaidChoice> ariaLabel={t('bill.paidStatus')} value={paid} onChange={setPaid}
           options={[{ value: 'paid', label: t('bill.paid') }, { value: 'unpaid', label: t('bill.unpaid') }, { value: 'all', label: t('bill.allStatus') }]} />
         <RangeFilter choice={choice} onChoice={setChoice} custom={custom} onCustom={setCustom} />
-        <div className="ms-auto"><SearchBox value={search} onChange={setSearch} placeholder={t('web.bills.search')} className="w-72" /></div>
+        <div className="ms-auto flex flex-wrap items-center gap-2">
+          <FilterBox value={vendor} onChange={setVendor} placeholder={t('web.reports.vendorBox')} />
+          <FilterBox caps value={vehicle} onChange={setVehicle} placeholder={t('web.reports.vehicleBox')} />
+          <FilterBox caps value={caseNo} onChange={setCaseNo} placeholder={t('web.reports.caseBox')} />
+          <SearchBox value={search} onChange={setSearch} placeholder={t('web.bills.search')} className="w-72" />
+        </div>
       </>}>
       <div className="fit:h-full">
         <ListTable title={t('web.bills.listTitle')} note={count} columns={columns} rows={rows} loading={loading}
           rowKey={(b) => b.id} onOpen={(b) => navigate(`/bills/${b.id}`)}
-          empty={search.trim() || choice !== 'all' || paid !== 'all' ? { title: t('empty.noMatch'), hint: t('empty.noMatchHint') } : { title: t('empty.bills'), hint: t('web.empty.bills') }}
+          empty={search.trim() || vendor.trim() || vehicle.trim() || caseNo.trim() || choice !== 'all' || paid !== 'all' ? { title: t('empty.noMatch'), hint: t('empty.noMatchHint') } : { title: t('empty.bills'), hint: t('web.empty.bills') }}
           footer={[t('web.list.total'), '', '', '', '', <Money key="t" value={totals.total} />, <Money key="p" value={totals.paid} tone="good" />,
             <Money key="b" value={totals.balance} tone="bad" />, '']} />
       </div>

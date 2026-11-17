@@ -65,14 +65,14 @@ export default function ProfilePage() {
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 items-start max-w-[1800px]">
         <div className="xl:col-span-8 flex flex-col gap-5">
           {/* The person, as the page's one bright moment. */}
-          <section className="noir-hero relative overflow-hidden rounded-[28px] p-7 sm:p-8 text-white flex flex-wrap items-center gap-6">
-            <span className="rounded-full bg-white/20 ring-4 ring-white/15 grid place-items-center font-display text-[34px] w-[92px] h-[92px] shrink-0">
+          <section className="noir-hero relative overflow-hidden rounded-[20px] p-7 sm:p-8 text-white flex flex-wrap items-center gap-6">
+            <span className="rounded-full bg-white/20 ring-4 ring-white/15 grid place-items-center font-display text-[32px] w-[92px] h-[92px] shrink-0">
               {user.name.trim().split(/\s+/).slice(0, 2).map((w) => w[0]?.toUpperCase()).join('')}
             </span>
             <div className="min-w-0 flex-1">
-              <p className="font-display text-[30px] leading-tight tracking-[-0.02em] truncate">{user.name}</p>
-              <p className="mt-1 text-[15px] text-white/80" dir="ltr">{user.email}{user.phone && ` · ${user.phone}`}</p>
-              <div className="mt-4 flex flex-wrap gap-2 text-[13.5px]">
+              <p className="font-display text-[28px] leading-tight tracking-[-0.02em] truncate">{user.name}</p>
+              <p className="mt-1 text-[14px] text-white/80" dir="ltr">{user.email}{user.phone && ` · ${user.phone}`}</p>
+              <div className="mt-4 flex flex-wrap gap-2 text-[13px]">
                 <span className="h-8 px-3.5 rounded-full bg-white/20 grid place-items-center font-medium">{t('web.auth.profile.owner')}</span>
                 <span className="h-8 px-3.5 rounded-full bg-white/10 grid place-items-center">{t('web.auth.profile.memberSince', { date: formatDate(user.createdAt) })}</span>
               </div>
@@ -108,11 +108,11 @@ export default function ProfilePage() {
           <SectionCard title={t('web.auth.profile.company')}>
             <div className="flex items-center gap-4">
               {data?.company.logo
-                ? <img src={data.company.logo} alt="" className="w-14 h-14 rounded-2xl object-contain bg-surface-2 p-1.5" />
-                : <span className="w-14 h-14 rounded-2xl bg-surface-2 grid place-items-center text-content-subtle"><Building2 size={22} /></span>}
+                ? <img src={data.company.logo} alt="" className="w-14 h-14 rounded-xl object-contain bg-surface-2 p-1.5" />
+                : <span className="w-14 h-14 rounded-xl bg-surface-2 grid place-items-center text-content-subtle"><Building2 size={22} /></span>}
               <div className="min-w-0">
                 <p className="text-[16px] font-medium text-content truncate">{data?.company.name || t('app.name')}</p>
-                <p className="text-[13.5px] text-content-subtle truncate">{[data?.company.phone, data?.company.address].filter(Boolean).join(' · ')}</p>
+                <p className="text-[13px] text-content-subtle truncate">{[data?.company.phone, data?.company.address].filter(Boolean).join(' · ')}</p>
               </div>
             </div>
             <Link to="/settings" className="mt-4 inline-flex text-[14px] font-medium text-brand-strong hover:underline underline-offset-4">{t('web.auth.profile.companyEdit')}</Link>
@@ -122,7 +122,7 @@ export default function ProfilePage() {
             <ul className="flex flex-col gap-3.5">
               {rows.map(([key, n]) => (
                 <li key={key}>
-                  <div className="flex items-baseline justify-between text-[14.5px]">
+                  <div className="flex items-baseline justify-between text-[14px]">
                     <span className="text-content-muted">{t(key)}</span>
                     <span className="font-medium tabular-nums text-content">{n}</span>
                   </div>
@@ -141,7 +141,7 @@ export default function ProfilePage() {
           </SectionCard>
 
           <section className="card px-6 sm:px-7 py-5 flex flex-wrap items-center justify-between gap-3">
-            <p className="text-[13.5px] text-content-subtle max-w-[240px]">{t('web.auth.profile.signOutHint')}</p>
+            <p className="text-[13px] text-content-subtle max-w-[240px]">{t('web.auth.profile.signOutHint')}</p>
             <Btn tone="danger" icon={<LogOut size={16} className="rtl:rotate-180" />} onClick={() => { signOut(); navigate('/login'); }}>{t('web.auth.signOut')}</Btn>
           </section>
         </aside>

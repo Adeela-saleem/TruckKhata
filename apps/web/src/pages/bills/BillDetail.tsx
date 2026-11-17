@@ -13,7 +13,7 @@ import { DeleteButton, HistoryCard, PrintButton } from '../../ui/record';
 import { RecordHeader } from '../../ui/RecordHeader';
 
 const th = 'h-[48px] px-4 first:ps-6 last:pe-6 text-[13px] font-medium text-content-subtle whitespace-nowrap border-b border-line';
-const td = 'px-4 first:ps-6 last:pe-6 text-[14.5px] text-content';
+const td = 'px-4 first:ps-6 last:pe-6 text-[14px] text-content';
 
 export default function BillDetail() {
   const { id = '' } = useParams();
@@ -35,7 +35,6 @@ export default function BillDetail() {
       </>}>
       <div className="max-w-[1800px]">
         <RecordHeader
-          title={<h2 className="font-display text-[26px] leading-tight font-semibold tracking-[-0.02em] text-content break-words">{b.vendor}</h2>}
           badges={<>
             <PaidBadge balance={b.balance} />
             {b.case_id && <Badge tone={b.count_in_profit ? 'success' : 'neutral'}>{t(b.count_in_profit ? 'trip.countedInProfit' : 'trip.notCounted')}</Badge>}
@@ -99,9 +98,9 @@ export default function BillDetail() {
             <SectionCard title={t('web.bills.summary')}>
               <SumLine label={t('fields.total')} value={b.total} />
               <SumLine label={t('fields.paid')} value={b.paid} sign="-" tone="good" />
-              <div className="mt-3 rounded-2xl bg-surface-2 border border-line px-4 py-3 flex items-baseline justify-between gap-3">
+              <div className="mt-3 rounded-xl bg-surface-2 border border-line px-4 py-3 flex items-baseline justify-between gap-3">
                 <span className="text-[14px] font-semibold text-content">{t('fields.balance')}</span>
-                <Money value={b.balance} tone={b.balance > 0 ? 'bad' : undefined} className="font-display text-[26px] font-semibold tracking-[-0.02em]" />
+                <Money value={b.balance} tone={b.balance > 0 ? 'bad' : undefined} className="font-display text-[28px] font-semibold tracking-[-0.02em]" />
               </div>
             </SectionCard>
           </aside>

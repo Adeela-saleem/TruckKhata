@@ -1,18 +1,18 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FileSpreadsheet } from 'lucide-react';
-import type { CycleStatus } from '../../core/domain/calc';
+import type { CycleStatus, Direction } from '../../core/domain/calc';
 import { formatDate } from '../../core/domain/dates';
 import { referenceKey } from '../../core/domain/keys';
 import { listCycles, type CycleRow } from '../../core/repo/cases';
 import { tripSheetReport } from '../../core/repo/reports';
 import { useApp, useData } from '../../app/context';
 import { Segmented } from '../../components/shared/Segmented';
-import { Btn, CaseChip, Money, StatusBadge } from '../../ui/bits';
+import { AddButton, Btn, CaseChip, Money, StatusBadge } from '../../ui/bits';
 import { downloadCsv, listDocument, periodText } from '../../ui/exports';
 import { ListTable, type Column } from '../../ui/ListTable';
 import { Page } from '../../ui/Page';
-import { RangeFilter, SearchBox, rangeFor, type RangeChoice } from '../../ui/range';
+import { FilterBox, RangeFilter, SearchBox, rangeFor, type RangeChoice } from '../../ui/range';
 import { PrintButton } from '../../ui/record';
 
 type StatusChoice = 'all' | CycleStatus;
@@ -23,12 +23,18 @@ export default function TripList() {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState<StatusChoice>('all');
+  const [direction, setDirection] = useState<Direction | 'all'>('all');
+  const [vehicle, setVehicle] = useState('');
+  const [party, setParty] = useState('');
   const [choice, setChoice] = useState<RangeChoice>('all');
   const [custom, setCustom] = useState({ from: null as string | null, to: null as string | null });
   const range = rangeFor(choice, custom);
   const { data: rows, loading } = useData(
-    (db) => listCycles(db, { search, range, status: status === 'all' ? undefined : status }),
-    [search, status, range.from, range.to],
+    (db) => listCycles(db, {
+      search, range, vehicle: vehicle.trim(), party: party.trim(),
+      status: status === 'all' ? undefined : status, direction: direction === 'all' ? undefined : direction,
+    }),
+    [search, status, direction, vehicle, party, range.from, range.to],
   );
   const totals = useMemo(() => (rows ?? []).reduce(
     (n, c) => ({ freight: n.freight + c.summary.freight, expenses: n.expenses + c.summary.totalExpenses, profit: n.profit + c.summary.profit }),
@@ -61,17 +67,24 @@ export default function TripList() {
       actions={<>
         <PrintButton build={async () => listDocument(await report(), t('modules.trips'), periodText(range, t), t)} />
         <Btn icon={<FileSpreadsheet size={16} />} onClick={() => void exportCsv()}>{t('web.excel')}</Btn>
+        <AddButton to="/trips/new" label={t('web.shell.addTrip')} />
       </>}
       bar={<>
         <Segmented ariaLabel={t('fields.status')} value={status} onChange={setStatus}
           options={[{ value: 'all' as StatusChoice, label: t('web.trips.allStatus') }, ...statuses.map((s) => ({ value: s as StatusChoice, label: t(`status.${s}`) }))]} />
+        <Segmented ariaLabel={t('fields.direction')} value={direction} onChange={setDirection}
+          options={[{ value: 'all', label: t('web.ada.allDirections') }, { value: 'outward', label: t('direction.outward') }, { value: 'return', label: t('direction.return') }]} />
         <RangeFilter choice={choice} onChoice={setChoice} custom={custom} onCustom={setCustom} />
-        <div className="ms-auto"><SearchBox value={search} onChange={setSearch} placeholder={t('web.trips.search')} className="w-72" /></div>
+        <div className="ms-auto flex flex-wrap items-center gap-2">
+          <FilterBox caps value={vehicle} onChange={setVehicle} placeholder={t('web.reports.vehicleBox')} />
+          <FilterBox value={party} onChange={setParty} placeholder={t('web.reports.partyBox')} />
+          <SearchBox value={search} onChange={setSearch} placeholder={t('web.trips.search')} className="w-72" />
+        </div>
       </>}>
       <div className="fit:h-full">
         <ListTable title={t('web.trips.listTitle')} note={count} columns={columns} rows={rows} loading={loading}
           rowKey={(c) => c.caseId} onOpen={(c) => navigate(`/trips/${c.caseId}`)}
-          empty={search.trim() || choice !== 'all' || status !== 'all' ? { title: t('empty.noMatch'), hint: t('empty.noMatchHint') } : { title: t('empty.trips'), hint: t('web.empty.trips') }}
+          empty={search.trim() || vehicle.trim() || party.trim() || choice !== 'all' || status !== 'all' || direction !== 'all' ? { title: t('empty.noMatch'), hint: t('empty.noMatchHint') } : { title: t('empty.trips'), hint: t('web.empty.trips') }}
           footer={[t('web.list.total'), '', '', '', '', '', <Money key="f" value={totals.freight} />, <Money key="e" value={totals.expenses} />,
             <Money key="p" value={totals.profit} tone="auto" className="font-semibold" />]} />
       </div>

@@ -35,7 +35,7 @@ export function useToast() {
 const ICONS = {
   success: <CheckCircle2 size={16} className="text-emerald-500" />,
   error:   <AlertTriangle size={16} className="text-rose-500" />,
-  info:    <Info size={16} className="text-brand" />,
+  info:    <Info size={16} className="text-brand-strong" />,
 }
 
 export function Toaster() {

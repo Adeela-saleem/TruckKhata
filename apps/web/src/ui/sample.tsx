@@ -56,7 +56,7 @@ export function SampleCard() {
   const { clear, busy } = useSampleData();
   return (
     <section className="card px-6 sm:px-7 py-6">
-      <h2 className="font-display text-[18px] text-content">{t('web.sample.title')}</h2>
+      <h2 className="font-display text-[16px] text-content">{t('web.sample.title')}</h2>
       <p className="mt-1.5 text-[14px] text-content-muted max-w-2xl leading-relaxed">{t('web.sample.hint')}</p>
       <div className="mt-5 flex flex-wrap gap-2">
         <SampleButton />

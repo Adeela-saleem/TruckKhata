@@ -130,14 +130,14 @@ function Figures({ report }: { report: ReportResult }) {
             <div key={x.label + (x.text ?? '')} className="min-w-0 lg:flex-1 px-4 py-1.5">
               <p className="text-[13px] text-content-muted truncate">{label(x, t)}</p>
               <Money value={x.value} tone={x.value < 0 ? 'bad' : undefined}
-                className="mt-1 block font-display text-[21px] leading-tight font-semibold tracking-[-0.02em] text-content" />
+                className="mt-1 block font-display text-[20px] leading-tight font-semibold tracking-[-0.02em] text-content" />
             </div>
           ))}
         </div>
       )}
-      <div className="noir-hero relative overflow-hidden rounded-[22px] px-6 py-4 sm:min-w-[260px] flex flex-col justify-center text-white">
-        <p className="text-[13.5px] text-white/85">{label(head, t)}</p>
-        <span dir="ltr" className="mt-1 font-display text-[32px] leading-none font-semibold tracking-[-0.03em] tabular-nums self-start">
+      <div className="noir-hero relative overflow-hidden rounded-[20px] px-6 py-4 sm:min-w-[260px] flex flex-col justify-center text-white">
+        <p className="text-[13px] text-white/85">{label(head, t)}</p>
+        <span dir="ltr" className="hero-accent mt-1 font-display text-[32px] leading-none font-semibold tracking-[-0.03em] tabular-nums self-start">
           {formatPKR(head.value)}
         </span>
       </div>
@@ -154,18 +154,18 @@ function MonthlyCosts({ report }: { report: ReportResult | undefined }) {
   const costs = totals.filter(isCost);
   return (
     <section className="card flex flex-col fit:max-h-full">
-      <div className="shrink-0 flex items-baseline justify-between gap-3 px-6 py-3.5 border-b border-line">
-        <h2 className="card-title font-display text-[18px] text-content">{t('web.reports.monthlyCosts')}</h2>
+      <div className="shrink-0 flex items-baseline justify-between gap-3 px-6 py-4 card-head">
+        <h2 className="card-title font-display text-[16px] text-content">{t('web.reports.monthlyCosts')}</h2>
         <span className="text-[13px] text-content-subtle">{t('web.reports.monthlyCostsNote')}</span>
       </div>
       <div className="flex-1 min-h-0 overflow-auto scroll-thin px-6 py-3">
         <SumLine label={t('report.grossProfit')} value={gross?.value ?? 0} />
         {costs.length === 0
-          ? <p className="py-3 text-[13.5px] text-content-subtle">{t('web.reports.monthlyCostsNone')}</p>
+          ? <p className="py-3 text-[13px] text-content-subtle">{t('web.reports.monthlyCostsNone')}</p>
           : costs.map((c) => <SumLine key={c.label + (c.text ?? '')} label={c.text ?? t(c.label)} value={Math.abs(c.value)} sign="-" />)}
         <SumLine label={t('report.bachat')} value={bachat?.value ?? 0} total tone={(bachat?.value ?? 0) < 0 ? 'bad' : undefined} />
       </div>
-      <p className="shrink-0 px-6 py-3.5 border-t border-line text-[12.5px] leading-relaxed text-content-subtle">{t('report.vehicleHint')}</p>
+      <p className="shrink-0 px-6 py-3.5 border-t border-line text-[12px] leading-relaxed text-content-subtle">{t('report.vehicleHint')}</p>
     </section>
   );
 }

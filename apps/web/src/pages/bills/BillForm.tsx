@@ -19,7 +19,7 @@ type LineDraft = { key: number; description: string; quantity: string; unit: str
 let nextKey = 1;
 const blank = (): LineDraft => ({ key: nextKey++, description: '', quantity: '', unit: '', amount: '' });
 
-const cell = 'noir-input w-full h-11 px-3 rounded-xl text-[15px] text-content placeholder:text-content-subtle focus:outline-none';
+const cell = 'noir-input w-full h-11 px-3 rounded-xl text-[14px] text-content placeholder:text-content-subtle focus:outline-none';
 
 export default function BillForm() {
   const { db, t } = useApp();
@@ -79,18 +79,18 @@ export default function BillForm() {
             <SuggestField required label={t('fields.vendor')} value={f.vendor} onChange={set('vendor')} suggestions={vendors ?? []} />
             <Field caps label={t('fields.vehicle')} value={f.vehicle} onChange={set('vehicle')} />
             <Field caps label={t('fields.caseOptional')} value={f.caseNo} onChange={set('caseNo')} />
-            <div className="sm:col-span-2 flex items-start justify-between gap-4 rounded-2xl border border-line bg-surface-2/60 px-4 py-3">
+            <div className="sm:col-span-2 flex items-start justify-between gap-4 rounded-xl border border-line bg-surface-2/60 px-4 py-3">
               <div className="min-w-0">
                 <p className={cn('text-[14px] font-medium', hasCase ? 'text-content' : 'text-content-subtle')}>{t('bill.countLabel')}</p>
-                <p className="mt-0.5 text-[12.5px] text-content-subtle">{hasCase ? t('bill.countHint') : t('web.bills.countNeedsCase')}</p>
+                <p className="mt-0.5 text-[12px] text-content-subtle">{hasCase ? t('bill.countHint') : t('web.bills.countNeedsCase')}</p>
               </div>
               <Toggle checked={f.count} onChange={set('count')} disabled={!hasCase} aria-label={t('bill.countLabel')} />
             </div>
           </FormSection>
 
           <section className="card px-6 py-5">
-            <div className="flex items-baseline justify-between gap-3 border-b border-line pb-3 mb-4">
-              <h2 className="card-title font-display text-[18px] text-content">{t('bill.lines')}</h2>
+            <div className="flex items-baseline justify-between gap-3 card-head -mx-6 -mt-5 mb-4 px-6 py-4">
+              <h2 className="card-title font-display text-[16px] text-content">{t('bill.lines')}</h2>
               <span className="text-[13px] text-content-subtle tabular-nums">{t('web.bills.itemsCount', { count: filled })}</span>
             </div>
             <div className="hidden sm:grid grid-cols-[minmax(0,1fr)_88px_100px_150px_40px] gap-3 pb-2 text-[13px] font-medium text-content-muted">
@@ -126,7 +126,7 @@ export default function BillForm() {
               <Btn icon={<Plus size={16} />} onClick={() => setLines((all) => [...all, blank()])}>{t('actions.addLine')}</Btn>
               <span className="flex items-baseline gap-3">
                 <span className="text-[14px] text-content-muted">{t('fields.total')}</span>
-                <Money value={total} className="text-[17px] font-semibold text-content" />
+                <Money value={total} className="text-[16px] font-semibold text-content" />
               </span>
             </div>
           </section>
@@ -140,17 +140,17 @@ export default function BillForm() {
         {/* The bill total stays in view while typing. */}
         <aside className="xl:col-span-4 xl:sticky xl:top-5 flex flex-col gap-4">
           <section className="card px-6 py-5">
-            <div className="flex items-baseline justify-between border-b border-line pb-3 mb-2">
-              <h2 className="card-title font-display text-[18px] text-content">{t('web.bills.summary')}</h2>
+            <div className="flex items-baseline justify-between card-head -mx-6 -mt-5 mb-4 px-6 py-4">
+              <h2 className="card-title font-display text-[16px] text-content">{t('web.bills.summary')}</h2>
               <span className="text-[13px] text-content-subtle">{t('web.ada.calcNote')}</span>
             </div>
             <SumLine label={t('fields.total')} value={total} />
             <SumLine label={t('fields.paid')} value={paid} sign="-" tone="good" />
-            <div className="mt-3 rounded-2xl bg-surface-2 border border-line px-4 py-3 flex items-baseline justify-between gap-3">
+            <div className="mt-3 rounded-xl bg-surface-2 border border-line px-4 py-3 flex items-baseline justify-between gap-3">
               <span className="text-[14px] font-semibold text-content">{t('fields.balance')}</span>
-              <Money value={balance} tone={balance > 0 ? 'bad' : undefined} className="font-display text-[26px] font-semibold tracking-[-0.02em]" />
+              <Money value={balance} tone={balance > 0 ? 'bad' : undefined} className="font-display text-[28px] font-semibold tracking-[-0.02em]" />
             </div>
-            <p className="mt-3 text-[12.5px] text-content-subtle leading-relaxed">
+            <p className="mt-3 text-[12px] text-content-subtle leading-relaxed">
               {f.count ? t('web.bills.countedNote', { caseNo: f.caseNo.trim() }) : hasCase ? t('trip.notCounted') : t('web.bills.noCaseNote')}
             </p>
           </section>

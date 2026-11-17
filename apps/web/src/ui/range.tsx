@@ -38,6 +38,17 @@ export function RangeFilter({ choice, onChoice, custom, onCustom }: {
 export function SearchBox({ value, onChange, placeholder, className = 'w-60' }: { value: string; onChange: (v: string) => void; placeholder: string; className?: string }) {
   return (
     <input type="search" value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} aria-label={placeholder}
-      className={`noir-search h-8 px-3.5 rounded-full text-[13px] text-content placeholder:text-content-subtle focus:outline-none ${className}`} />
+      className={`noir-search h-9 px-3 rounded-[10px] text-[13px] text-content placeholder:text-content-subtle focus:outline-none ${className}`} />
+  );
+}
+
+/** A narrow filter box for one field (V#, Case #, broker, route) beside a list's main search. */
+export function FilterBox({ value, onChange, placeholder, caps, list }: {
+  value: string; onChange: (v: string) => void; placeholder: string; caps?: boolean; list?: string;
+}) {
+  return (
+    <input type="search" value={value} placeholder={placeholder} aria-label={placeholder} list={list} dir={caps ? 'ltr' : undefined}
+      onChange={(e) => onChange(caps ? e.target.value.toUpperCase() : e.target.value)}
+      className={`noir-search h-9 px-3 rounded-[10px] text-[13px] text-content placeholder:text-content-subtle focus:outline-none ${caps ? 'w-32 font-mono tracking-wide placeholder:font-sans placeholder:tracking-normal' : 'w-40'}`} />
   );
 }

@@ -20,6 +20,7 @@ const config: Config = {
       colors: {
         ink: 'rgb(var(--ink) / <alpha-value>)',
         'on-ink': 'rgb(var(--on-ink) / <alpha-value>)',
+        'on-brand': 'rgb(var(--on-brand) / <alpha-value>)',
         good: 'rgb(var(--good) / <alpha-value>)',
         bad: 'rgb(var(--bad) / <alpha-value>)',
         // Semantic, theme-aware tokens (driven by CSS vars in index.css)
@@ -28,6 +29,7 @@ const config: Config = {
           DEFAULT: 'rgb(var(--surface) / <alpha-value>)',
           2:       'rgb(var(--surface-2) / <alpha-value>)',
         },
+        'card-head': 'rgb(var(--card-head) / <alpha-value>)',
         line: {
           DEFAULT: 'rgb(var(--line) / <alpha-value>)',
           strong:  'rgb(var(--line-strong) / <alpha-value>)',
@@ -44,7 +46,8 @@ const config: Config = {
         },
       },
       borderRadius: {
-        xl: '14px',
+        xl: '12px',
+        '2xl': '16px',
       },
       fontSize: {
         caption: ['0.75rem', { lineHeight: '1.25rem', fontWeight: '500' }],

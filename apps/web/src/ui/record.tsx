@@ -115,7 +115,7 @@ export function HistoryCard({ recordIds, record }: { recordIds: string[]; record
     <section className="card">
       <div className="flex items-center gap-2 px-6 py-3">
         <button type="button" onClick={() => setOpen(!open)} aria-expanded={open}
-          className="flex-1 flex items-center gap-2 h-10 text-start text-[15px] font-semibold text-content">
+          className="flex-1 flex items-center gap-2 h-10 text-start text-[14px] font-semibold text-content">
           {t('actions.history')}
           <span className="text-[13px] font-normal text-content-subtle tabular-nums">{rows.length}</span>
           <ChevronDown size={16} className={`text-content-subtle transition-transform ${open ? 'rotate-180' : ''}`} />
@@ -124,11 +124,11 @@ export function HistoryCard({ recordIds, record }: { recordIds: string[]; record
       </div>
       {open && (
         <ol className="border-t border-line px-6 py-2">
-          {rows.length === 0 && <li className="py-3 text-[13.5px] text-content-subtle">{t('history.none')}</li>}
+          {rows.length === 0 && <li className="py-3 text-[13px] text-content-subtle">{t('history.none')}</li>}
           {rows.map((r) => (
             <li key={r.id} className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 py-2.5 border-b border-line last:border-b-0">
               <span className="text-[14px] text-content">{r.text}</span>
-              <span className="text-[12.5px] text-content-subtle tabular-nums">{formatDate(r.at)} {timeOf(r.at)}</span>
+              <span className="text-[12px] text-content-subtle tabular-nums">{formatDate(r.at)} {timeOf(r.at)}</span>
             </li>
           ))}
         </ol>

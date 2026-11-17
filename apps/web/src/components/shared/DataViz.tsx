@@ -47,7 +47,7 @@ export function Change({ current, previous, goodWhen = 'up' }: { current: number
   const Icon = pct > 0 ? ArrowUp : ArrowDown
   const color = rounded === 0 ? 'rgb(var(--text-3))' : (pct > 0) === (goodWhen === 'up') ? 'var(--accent-green)' : 'var(--accent-red)'
   return (
-    <span className="inline-flex shrink-0 items-center gap-0.5 text-[14px] lg:text-[15px] font-semibold tabular-nums" style={{ color }} title="Change vs the previous period">
+    <span className="inline-flex shrink-0 items-center gap-0.5 text-[14px] lg:text-[14px] font-semibold tabular-nums" style={{ color }} title="Change vs the previous period">
       {rounded !== 0 && <Icon size={15} strokeWidth={2.5} />}{Math.abs(rounded)}%
     </span>
   )
@@ -70,33 +70,28 @@ export interface Kpi {
 }
 
 /** The tab's figures in one card, split by thin lines, as on the Overview. A figure with a list behind it opens that list. */
-/** A row of key figures in one card: a pastel icon tile, the label, the figure and a plain note. */
+/** A row of key figures in one card: the label, the figure and a plain note. Numbers only, no decoration. */
 export function KpiStrip({ kpis, columns }: { kpis: Kpi[]; columns: 4 | 6 | 8 }) {
   return (
     <div className="card p-5 sm:p-6">
       <div className={`grid grid-cols-2 gap-x-5 gap-y-6 lg:gap-x-0 lg:gap-y-0 lg:divide-x lg:divide-line rtl:lg:divide-x-reverse ${columns === 8 ? 'lg:grid-cols-8' : columns === 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-6'}`}>
-        {kpis.map(({ label, icon: Icon, tone, value, display, previous, note, alarm, goodWhen, onClick }) => {
+        {kpis.map(({ label, value, display, previous, note, alarm, goodWhen, onClick }) => {
           const body = (
             <>
-              <span className="flex items-center gap-2.5">
-                <span className="kpi-icon w-9 h-9 rounded-full grid place-items-center" style={{ backgroundColor: `color-mix(in srgb, ${tone} 14%, transparent)`, color: tone }}>
-                  <Icon size={18} strokeWidth={1.9} />
-                </span>
-                <span className="min-w-0 text-[14.5px] leading-tight text-content-muted">{label}</span>
-              </span>
-              <span className="mt-4 flex flex-wrap items-baseline gap-x-2">
-                <span dir="ltr" className={`font-display text-[22px] sm:text-[28px] lg:text-[32px] leading-none font-medium tracking-[-0.03em] tabular-nums ${alarm ? 'text-bad' : 'text-content'}`} title={display ?? value.toLocaleString()}>
+              <span className="block min-w-0 text-[13px] leading-5 text-content-muted">{label}</span>
+              <span className="mt-2 flex flex-wrap items-baseline gap-x-2">
+                <span dir="ltr" className={`font-display text-[20px] sm:text-[24px] lg:text-[28px] leading-none font-medium tracking-[-0.02em] tabular-nums ${alarm ? 'text-bad' : 'text-content'}`} title={display ?? value.toLocaleString()}>
                   {display ?? formatCompact(value)}
                 </span>
                 <Change current={value} previous={previous} goodWhen={goodWhen} />
               </span>
-              <span className="mt-2 block text-[13.5px] leading-snug tabular-nums text-content-subtle">{note}</span>
+              <span className="mt-2 block text-[12px] leading-4 tabular-nums text-content-subtle">{note}</span>
             </>
           )
           const cls = 'block min-w-0 w-full text-start lg:px-6 lg:first:ps-1 lg:last:pe-1'
           return onClick ? (
             <button key={label} type="button" onClick={onClick} title={label}
-              className={`${cls} rounded-2xl transition-colors hover:bg-content/[0.025] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40`}>
+              className={`${cls} rounded-xl transition-colors hover:bg-content/[0.025] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40`}>
               {body}
             </button>
           ) : (
@@ -219,8 +214,8 @@ export function CategoryTreemap({ items, restCount, restValue, onSelect, onRest,
               className="absolute flex flex-col justify-start overflow-hidden rounded-[10px] p-3 text-left transition-opacity duration-150 enabled:hover:opacity-85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-1">
               {roomy && (
                 <>
-                  <span className="block text-[14px] xl:text-[15px] font-semibold leading-tight break-words">{t.label}</span>
-                  <span className="mt-1 block font-display text-[22px] leading-none font-semibold tracking-[-0.02em] tabular-nums">{formatCompact(t.value)}</span>
+                  <span className="block text-[14px] xl:text-[14px] font-semibold leading-tight break-words">{t.label}</span>
+                  <span className="mt-1 block font-display text-[20px] leading-none font-semibold tracking-[-0.02em] tabular-nums">{formatCompact(t.value)}</span>
                   {!rest && t.h > 112 && t.w > 132 && <span className="mt-1.5 block text-[13px] leading-tight opacity-85 tabular-nums">Avg severity {t.severity.toFixed(1)}</span>}
                 </>
               )}
@@ -250,7 +245,7 @@ export function ShareBar({ parts, unit = 'posts' }: { parts: { name: string; val
           <div key={p.name} className="min-w-0">
             <p className="flex items-center gap-2 text-[14px] text-content-muted"><span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: p.color }} />{p.name}</p>
             <p className="mt-1 font-display text-[28px] leading-none font-semibold tracking-[-0.03em] tabular-nums text-content">{sharePct(p.value, total)}</p>
-            <p className="mt-1 text-[13.5px] tabular-nums text-content-muted">{p.value.toLocaleString()} {p.value === 1 ? unit.replace(/s$/, '') : unit}</p>
+            <p className="mt-1 text-[13px] tabular-nums text-content-muted">{p.value.toLocaleString()} {p.value === 1 ? unit.replace(/s$/, '') : unit}</p>
           </div>
         ))}
       </div>
@@ -270,10 +265,10 @@ export function RankedBars({ rows, tone = 'var(--accent-green, #10b981)', unit, 
         const body = (
           <>
             <span className="flex w-full items-baseline gap-3">
-              <span className={`min-w-0 flex-1 truncate text-[14px] xl:text-[15px] text-content ${compact ? 'leading-tight' : 'leading-snug'}`}>
+              <span className={`min-w-0 flex-1 truncate text-[14px] xl:text-[14px] text-content ${compact ? 'leading-tight' : 'leading-snug'}`}>
                 {r.label}{r.sub && <span className="text-content-subtle"> {r.sub}</span>}
               </span>
-              <span className="text-[14px] xl:text-[15px] font-semibold tabular-nums text-content" title={unit ? `${r.value.toLocaleString()} ${unit}` : r.value.toLocaleString()}>{formatCompact(r.value)}</span>
+              <span className="text-[14px] xl:text-[14px] font-semibold tabular-nums text-content" title={unit ? `${r.value.toLocaleString()} ${unit}` : r.value.toLocaleString()}>{formatCompact(r.value)}</span>
             </span>
             <span className={`${compact ? 'mt-1' : 'mt-1.5'} block h-1 w-full shrink-0 rounded-full bg-content/[0.07] overflow-hidden`}>
               <span className="block h-full rounded-full" style={{ width: `${Math.max((r.value / top) * 100, 2)}%`, background: tone }} />

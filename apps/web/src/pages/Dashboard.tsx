@@ -15,9 +15,9 @@ import { loadDashboard, type DashboardData, type ExpenseGroup, type Period } fro
 
 /** Each expense type keeps one colour everywhere on the dashboard. */
 const groupColor: Record<ExpenseGroup, string> = {
-  diesel: '#6352E6', oil: '#F2B705', toll: '#3B82F6', loading: '#14B8A6', peshgi: '#EC4899', bills: '#F2994A', other: '#A3A8B6',
+  diesel: 'var(--accent-ink)', oil: '#F2B705', toll: '#3B82F6', loading: '#14B8A6', peshgi: '#9BC70E', bills: '#F2994A', other: '#A3A8B6',
 };
-const statusColor = { complete: '#16A34A', ready: '#6352E6', return_pending: '#F2B705', outward_pending: '#F2994A' } as const;
+const statusColor = { complete: '#16A34A', ready: 'var(--accent-ink)', return_pending: '#F2B705', outward_pending: '#F2994A' } as const;
 
 /** Lakh and crore, the way the company reads money. */
 function short(paisa: number) {
@@ -33,14 +33,14 @@ function short(paisa: number) {
 function Panel({ title, note, action, children, className = '' }: { title: string; note?: string; action?: ReactNode; children: ReactNode; className?: string }) {
   return (
     <section className={`card flex flex-col min-w-0 ${className}`}>
-      <div className="flex items-start justify-between gap-3 px-6 pt-5">
+      <div className="card-head flex flex-wrap items-start justify-between gap-x-3 gap-y-2 px-6 py-4">
         <div className="min-w-0">
-          <h2 className="font-display text-[18px] text-content truncate">{title}</h2>
-          {note && <p className="text-[13.5px] text-content-subtle mt-0.5">{note}</p>}
+          <h2 className="font-display text-[16px] text-content">{title}</h2>
+          {note && <p className="text-[13px] text-content-subtle mt-0.5">{note}</p>}
         </div>
         {action}
       </div>
-      <div className="flex-1 min-h-0 px-6 pt-4 pb-6">{children}</div>
+      <div className="flex-1 min-h-0 px-6 pt-5 pb-6">{children}</div>
     </section>
   );
 }
@@ -51,7 +51,7 @@ function Empty({ text }: { text: string }) {
 
 function OpenAll({ to }: { to: string }) {
   const { t } = useApp();
-  return <Link to={to} className="shrink-0 text-[13.5px] font-medium text-content-muted hover:text-brand-strong transition-colors">{t('web.dash.openAll')}</Link>;
+  return <Link to={to} className="shrink-0 text-[13px] font-medium text-content-muted hover:text-brand-strong transition-colors">{t('web.dash.openAll')}</Link>;
 }
 
 function Legend({ items }: { items: { label: string; color: string; line?: boolean }[] }) {
@@ -99,11 +99,11 @@ export default function Dashboard() {
           <section className="card relative overflow-hidden px-7 sm:px-9 py-8 flex flex-wrap items-center justify-between gap-6">
             <div className="max-w-xl">
               <h2 className="font-display text-[24px] tracking-[-0.02em] text-content">{t('web.sample.welcomeTitle')}</h2>
-              <p className="mt-2 text-[15px] text-content-muted leading-relaxed">{t('web.sample.welcomeText')}</p>
+              <p className="mt-2 text-[14px] text-content-muted leading-relaxed">{t('web.sample.welcomeText')}</p>
             </div>
             <div className="flex flex-wrap gap-2">
               <SampleButton />
-              <Link to="/ada/new" className="noir-cta h-11 px-5 rounded-full inline-flex items-center gap-2 text-[14.5px] font-medium">
+              <Link to="/ada/new" className="noir-cta h-10 px-4 rounded-[10px] inline-flex items-center gap-2 text-[14px] font-medium">
                 <BookOpenText size={16} />{t('web.sample.addFirst')}
               </Link>
             </div>
@@ -114,12 +114,12 @@ export default function Dashboard() {
 
         {data?.empty ? null : data ? (
           <KpiStrip columns={4} kpis={[
-            { label: t('web.dash.freightPeriod'), icon: Wallet, tone: 'var(--accent-violet)', value: data.totals.freight / 100, display: formatPKR(data.totals.freight), note: t('web.dash.freightNote'), onClick: () => navigate('/trips') },
+            { label: t('web.dash.freightPeriod'), icon: Wallet, tone: 'var(--accent-olive)', value: data.totals.freight / 100, display: formatPKR(data.totals.freight), note: t('web.dash.freightNote'), onClick: () => navigate('/trips') },
             { label: t('web.dash.expensesPeriod'), icon: Fuel, tone: 'var(--c-negative)', value: data.totals.expenses / 100, display: formatPKR(data.totals.expenses), note: t('web.dash.expensesNote'), onClick: () => navigate('/reports') },
             { label: t('web.dash.brokersOwe'), icon: Users, tone: '#D9A300', value: data.outstanding / 100, display: formatPKR(data.outstanding), note: t('web.dash.brokersOweNote', { count: data.owingCount }), onClick: () => navigate('/parties') },
             { label: t('web.dash.insurance'), icon: ShieldAlert, tone: data.alerts ? 'var(--accent-red)' : 'var(--accent-slate)', value: data.alerts, display: String(data.alerts), alarm: data.alerts > 0, note: data.alerts ? t('web.dash.insuranceNote') : t('web.dash.insuranceNone'), onClick: () => navigate('/insurance') },
           ]} />
-        ) : <Skeleton className="h-[150px] w-full rounded-[24px]" />}
+        ) : <Skeleton className="h-[148px] w-full rounded-2xl" />}
 
         {!data?.empty && <>
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
@@ -152,32 +152,32 @@ function ProfitHero({ data }: { data?: DashboardData }) {
   const margin = totals && totals.freight ? Math.round((totals.profit / totals.freight) * 100) : 0;
   const confirmedShare = totals && totals.profit > 0 ? Math.min(100, Math.max(0, Math.round((totals.confirmed / totals.profit) * 100))) : 0;
   return (
-    <section className="noir-hero relative overflow-hidden rounded-[28px] p-7 flex flex-col text-white xl:col-span-4 min-h-[380px]">
+    <section className="noir-hero relative overflow-hidden rounded-[20px] p-7 flex flex-col text-white xl:col-span-4 min-h-[380px]">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-[15px] text-white/85">{t('web.dash.profitPeriod')}</p>
-          <p className="text-[13.5px] text-white/65 mt-0.5 tabular-nums">{t('web.dash.tripsPeriod', { count: totals?.trips ?? 0 })}</p>
+          <p className="text-[14px] text-white/85">{t('web.dash.profitPeriod')}</p>
+          <p className="text-[13px] text-white/65 mt-0.5 tabular-nums">{t('web.dash.tripsPeriod', { count: totals?.trips ?? 0 })}</p>
         </div>
-        <Link to="/trips" className="nudge-parent noir-hero-btn shrink-0 w-11 h-11 rounded-full grid place-content-center" aria-label={t('modules.trips')}>
+        <Link to="/trips" className="nudge-parent noir-hero-btn shrink-0 w-10 h-10 rounded-[10px] grid place-content-center" aria-label={t('modules.trips')}>
           <ArrowRight size={18} className="nudge rtl:rotate-180" />
         </Link>
       </div>
-      <span dir="ltr" className="mt-6 font-display text-[50px] leading-none tracking-[-0.04em] tabular-nums self-start">
+      <span dir="ltr" className="hero-accent mt-6 font-display text-[44px] font-semibold leading-none tracking-[-0.04em] tabular-nums self-start">
         {(shown < 0 ? '-' : '') + 'Rs ' + Math.abs(shown).toLocaleString('en-US')}
       </span>
-      <span className="mt-3 self-start h-8 px-3.5 rounded-full bg-white/20 grid place-items-center text-[13.5px] font-medium tabular-nums">
+      <span className="mt-3 self-start h-8 px-3.5 rounded-[6px] bg-white/[0.08] ring-1 ring-white/10 grid place-items-center text-[13px] font-medium tabular-nums">
         {t('web.dash.margin')} {margin}%
       </span>
       <div className="mt-auto pt-8">
         <div className="flex h-3 rounded-full overflow-hidden bg-white/20">
-          <span className="h-full bg-white" style={{ width: `${confirmedShare}%` }} />
+          <span className="h-full bg-[#C1F11D]" style={{ width: `${confirmedShare}%` }} />
           <span className="h-full bg-[#FFD84D]" style={{ width: `${totals && totals.profit > 0 ? 100 - confirmedShare : 0}%` }} />
         </div>
         <dl className="mt-4 grid grid-cols-2 gap-3">
-          {([['confirmedPart', totals?.confirmed ?? 0, '#FFFFFF'], ['provisionalPart', totals?.provisional ?? 0, '#FFD84D']] as const).map(([key, value, dot]) => (
-            <div key={key} className="rounded-2xl bg-white/[0.12] px-4 py-3">
+          {([['confirmedPart', totals?.confirmed ?? 0, '#C1F11D'], ['provisionalPart', totals?.provisional ?? 0, '#FFD84D']] as const).map(([key, value, dot]) => (
+            <div key={key} className="rounded-xl bg-white/[0.06] ring-1 ring-white/10 px-4 py-3">
               <dt className="flex items-center gap-2 text-[13px] text-white/80"><span className="w-2 h-2 rounded-full" style={{ background: dot }} />{t(`web.dash.${key}`)}</dt>
-              <dd dir="ltr" className="mt-1 text-[17px] font-medium tabular-nums text-start">{formatPKR(value)}</dd>
+              <dd dir="ltr" className="mt-1 text-[16px] font-medium tabular-nums text-start">{formatPKR(value)}</dd>
             </div>
           ))}
         </dl>
@@ -193,7 +193,7 @@ function Trend({ data, monthName, className }: { data?: DashboardData; monthName
   const names = { freight: t('fields.freight'), expenses: t('fields.totalExpenses'), profit: t('fields.profit') };
   return (
     <Panel title={t('web.dash.trend')} note={t('web.dash.trendNote')} className={className}
-      action={<Legend items={[{ label: names.freight, color: 'rgb(var(--brand) / 0.22)' }, { label: names.expenses, color: '#F2994A' }, { label: names.profit, color: 'var(--accent-violet)', line: true }]} />}>
+      action={<Legend items={[{ label: names.freight, color: 'var(--accent-lime)' }, { label: names.expenses, color: 'var(--accent-ink)' }, { label: names.profit, color: '#F2994A', line: true }]} />}>
       {!data ? <Skeleton className="h-[300px] w-full" /> : (
         <div className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
@@ -202,9 +202,9 @@ function Trend({ data, monthName, className }: { data?: DashboardData; monthName
               <XAxis dataKey="label" reversed={rtl} tick={{ fontSize: 13 }} tickLine={false} axisLine={false} />
               <YAxis orientation={rtl ? 'right' : 'left'} tick={{ fontSize: 12 }} tickLine={false} axisLine={false} width={52} tickFormatter={(v: number) => short(v * 100)} />
               <Tooltip cursor={{ fill: 'rgb(var(--text-1))', fillOpacity: 0.04 }} content={<ChartTip names={names} />} />
-              <Bar dataKey="freight" fill="rgb(var(--brand) / 0.22)" radius={[8, 8, 8, 8]} />
-              <Bar dataKey="expenses" fill="#F2994A" radius={[8, 8, 8, 8]} />
-              <Line dataKey="profit" type="monotone" stroke="var(--accent-violet)" strokeWidth={3} dot={{ r: 4, fill: 'var(--accent-violet)', strokeWidth: 0 }} activeDot={{ r: 6 }} />
+              <Bar dataKey="freight" fill="var(--accent-lime)" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="expenses" fill="var(--accent-ink)" radius={[4, 4, 0, 0]} />
+              <Line dataKey="profit" type="monotone" stroke="#F2994A" strokeWidth={3} dot={{ r: 4, fill: '#F2994A', strokeWidth: 0 }} activeDot={{ r: 6 }} />
             </ComposedChart>
           </ResponsiveContainer>
         </div>
@@ -231,7 +231,7 @@ function ExpenseMix({ data, className }: { data?: DashboardData; className: stri
             </ResponsiveContainer>
             <div className="absolute inset-0 grid place-items-center text-center pointer-events-none">
               <div>
-                <p className="text-[12.5px] text-content-subtle">{t('fields.total')}</p>
+                <p className="text-[12px] text-content-subtle">{t('fields.total')}</p>
                 <p dir="ltr" className="font-display text-[20px] tabular-nums text-content">{short(total)}</p>
               </div>
             </div>
@@ -271,15 +271,15 @@ function StatusRing({ data, className }: { data?: DashboardData; className: stri
             </ResponsiveContainer>
             <div className="absolute inset-0 grid place-items-center text-center pointer-events-none">
               <div>
-                <p className="font-display text-[30px] leading-none tabular-nums text-content">{Math.round((complete / total) * 100)}%</p>
-                <p className="text-[12.5px] text-content-subtle mt-1">{t('status.complete')}</p>
+                <p className="font-display text-[28px] leading-none tabular-nums text-content">{Math.round((complete / total) * 100)}%</p>
+                <p className="text-[12px] text-content-subtle mt-1">{t('status.complete')}</p>
               </div>
             </div>
           </div>
           <ul className="w-full grid grid-cols-2 gap-x-4 gap-y-2">
             {data.status.map((s) => (
               <li key={s.status}>
-                <button type="button" onClick={() => navigate('/trips')} className="w-full flex items-center gap-2 text-[13.5px] text-start hover:text-content">
+                <button type="button" onClick={() => navigate('/trips')} className="w-full flex items-center gap-2 text-[13px] text-start hover:text-content">
                   <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: statusColor[s.status] }} />
                   <span className="flex-1 truncate text-content-muted">{t(`status.${s.status}`)}</span>
                   <span className="font-medium tabular-nums text-content">{s.count}</span>
@@ -307,8 +307,8 @@ function Trucks({ data, className }: { data?: DashboardData; className: string }
               <YAxis type="category" dataKey="vehicle" width={92} tickLine={false} axisLine={false}
                 tick={{ fontSize: 13, fontFamily: 'IBM Plex Mono, monospace', fontWeight: 600, fill: 'rgb(var(--text-1))' }} />
               <Tooltip cursor={{ fill: 'rgb(var(--text-1))', fillOpacity: 0.04 }} content={<ChartTip names={{ rupees: t('fields.profit') }} />} />
-              <Bar dataKey="rupees" radius={[8, 8, 8, 8]} label={{ position: 'right', formatter: (v: number) => short(v * 100), fontSize: 13, fill: 'rgb(var(--text-2))' }}>
-                {rows.map((r, i) => <Cell key={r.vehicle} fill={r.profit < 0 ? 'var(--accent-red)' : i === 0 ? 'var(--accent-violet)' : 'rgb(var(--brand) / 0.35)'} />)}
+              <Bar dataKey="rupees" radius={[0, 4, 4, 0]} label={{ position: 'right', formatter: (v: number) => short(v * 100), fontSize: 13, fill: 'rgb(var(--text-2))' }}>
+                {rows.map((r, i) => <Cell key={r.vehicle} fill={r.profit < 0 ? 'var(--accent-red)' : i === 0 ? 'var(--accent-lime)' : 'var(--accent-ink)'} />)}
               </Bar>
             </BarChart>
           </ResponsiveContainer>
@@ -331,7 +331,7 @@ function Collections({ data, className }: { data?: DashboardData; className: str
           {rows.map((p) => (
             <li key={p.id}>
               <Link to={`/parties/${p.id}`} className="block group">
-                <div className="flex items-baseline justify-between gap-3 text-[14.5px]">
+                <div className="flex items-baseline justify-between gap-3 text-[14px]">
                   <span className="truncate text-content group-hover:text-brand-strong transition-colors">{p.name}</span>
                   <span dir="ltr" className="font-medium tabular-nums text-content">{formatPKR(p.outstanding)}</span>
                 </div>
@@ -357,9 +357,9 @@ function ToFinish({ data, className }: { data?: DashboardData; className: string
         <ul className="-mx-3 flex flex-col">
           {rows.slice(0, 5).map((c) => (
             <li key={c.caseId}>
-              <Link to={`/trips/${c.caseId}`} className="flex items-center gap-3 h-[52px] px-3 rounded-2xl hover:bg-surface-2 transition-colors">
+              <Link to={`/trips/${c.caseId}`} className="flex items-center gap-3 h-[52px] px-3 rounded-xl hover:bg-surface-2 transition-colors">
                 <CaseChip caseNo={c.caseNo} />
-                <span dir="ltr" className="flex-1 min-w-0 truncate font-mono text-[13.5px] text-content-muted">{c.vehicle ?? ''}</span>
+                <span dir="ltr" className="flex-1 min-w-0 truncate font-mono text-[13px] text-content-muted">{c.vehicle ?? ''}</span>
                 <StatusBadge status={c.summary.status} />
               </Link>
             </li>

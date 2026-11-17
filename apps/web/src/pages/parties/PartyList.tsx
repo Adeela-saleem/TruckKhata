@@ -6,7 +6,7 @@ import { partiesDocument } from '../../core/print/documents';
 import { listParties, type PartyTotals } from '../../core/repo/parties';
 import { useApp, useData } from '../../app/context';
 import { Segmented } from '../../components/shared/Segmented';
-import { Btn, Money } from '../../ui/bits';
+import { AddButton, Btn, Money } from '../../ui/bits';
 import { col, downloadCsv, listReport } from '../../ui/exports';
 import { ListTable, type Column } from '../../ui/ListTable';
 import { Page } from '../../ui/Page';
@@ -52,6 +52,7 @@ export default function PartyList() {
       actions={<>
         <PrintButton build={() => partiesDocument(list, t)} />
         <Btn icon={<FileSpreadsheet size={16} />} onClick={() => downloadCsv(report(), 'brokers-parties', t)}>{t('web.excel')}</Btn>
+        <AddButton to="/parties/new" label={t('web.shell.addParty')} />
       </>}
       bar={<>
         <Segmented<View> ariaLabel={t('modules.parties')} value={view} onChange={setView}

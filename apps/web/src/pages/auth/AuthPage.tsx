@@ -9,7 +9,7 @@ import { cn } from '../../components/ui/cn';
 import { Mark } from '../../ui/Brand';
 import { ThemeButton } from '../../ui/Shell';
 
-const field = 'noir-input w-full h-12 px-4 rounded-2xl text-[15px] text-content placeholder:text-content-subtle focus:outline-none';
+const field = 'noir-input w-full h-11 px-3.5 rounded-[10px] text-[14px] text-content placeholder:text-content-subtle focus:outline-none';
 
 function Input({ label, type = 'text', value, onChange, autoComplete, hint, autoFocus, trailing, dir }: {
   label: string; type?: string; value: string; onChange: (v: string) => void; autoComplete?: string; hint?: string; autoFocus?: boolean; trailing?: ReactNode; dir?: 'ltr';
@@ -68,39 +68,34 @@ export default function AuthPage({ mode }: { mode: 'signin' | 'signup' }) {
 
   const eye = (
     <button type="button" onClick={() => setShow(!show)} aria-label={show ? t('web.auth.hide') : t('web.auth.show')}
-      className="w-9 h-9 rounded-full grid place-items-center text-content-subtle hover:text-content hover:bg-surface-2 transition-colors">
+      className="w-9 h-9 rounded-[8px] grid place-items-center text-content-subtle hover:text-content hover:bg-surface-2 transition-colors">
       {show ? <EyeOff size={17} /> : <Eye size={17} />}
     </button>
   );
   const signup = mode === 'signup';
 
   return (
-    <div className="relative min-h-viewport overflow-hidden bg-brand grid place-items-center px-4 py-10">
-      {/* The background: the brand violet with a faint dot grid and two soft rings, nothing that competes with the card. */}
-      <div aria-hidden className="absolute inset-0 opacity-[0.18] [background-image:radial-gradient(rgb(255_255_255/0.55)_1px,transparent_1px)] [background-size:22px_22px] [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_75%)]" />
-      <div aria-hidden className="absolute -top-40 -start-40 w-[520px] h-[520px] rounded-full bg-white/[0.07]" />
-      <div aria-hidden className="absolute -bottom-52 -end-32 w-[640px] h-[640px] rounded-full bg-white/[0.06]" />
-      <div aria-hidden className="absolute bottom-24 end-40 w-[220px] h-[220px] rounded-full border border-white/15" />
+    <div className="relative min-h-viewport overflow-hidden bg-[#111214] grid place-items-center px-4 py-10">
 
       <div className="absolute top-5 end-5 flex items-center gap-1 text-white">
         <button type="button" onClick={() => setLang(lang === 'en' ? 'ur' : 'en')}
-          className="h-10 px-3.5 rounded-full text-[14px] font-medium text-white/85 hover:text-white hover:bg-white/15 transition-colors">{lang === 'en' ? 'اردو' : 'English'}</button>
+          className="h-10 px-3.5 rounded-[10px] text-[14px] font-medium text-white/85 hover:text-white hover:bg-white/15 transition-colors">{lang === 'en' ? 'اردو' : 'English'}</button>
         <span className="[&_button]:text-white/85 [&_button:hover]:text-white [&_button:hover]:bg-white/15"><ThemeButton /></span>
       </div>
 
       <div className="relative w-full max-w-[420px]">
         <div className="flex items-center justify-center gap-3 mb-6 text-white">
           <span className="w-11 h-11 rounded-[14px] bg-white grid place-items-center shadow-[0_10px_30px_-12px_rgba(0,0,0,0.4)]"><Mark size={34} /></span>
-          <span className="font-display text-[22px] tracking-[-0.02em]">Truck Khata</span>
+          <span className="font-display text-[20px] tracking-[-0.02em]">Truck Khata</span>
         </div>
 
-        <form onSubmit={submit} noValidate className="card !rounded-[28px] px-7 sm:px-9 py-8 flex flex-col gap-4 shadow-[0_40px_80px_-30px_rgba(17,19,24,0.55)]">
+        <form onSubmit={submit} noValidate className="card !rounded-[20px] px-7 sm:px-9 py-8 flex flex-col gap-4 shadow-[0_40px_80px_-30px_rgba(17,19,24,0.55)]">
           <div className="text-center mb-1">
-            <h1 className="font-display text-[26px] leading-tight tracking-[-0.02em]">{t(signup ? 'web.auth.signUpTitle' : 'web.auth.signInTitle')}</h1>
-            <p className="mt-1 text-[14.5px] text-content-muted">{t(signup ? 'web.auth.signUpSub' : 'web.auth.signInSub')}</p>
+            <h1 className="font-display text-[28px] leading-tight tracking-[-0.02em]">{t(signup ? 'web.auth.signUpTitle' : 'web.auth.signInTitle')}</h1>
+            <p className="mt-1 text-[14px] text-content-muted">{t(signup ? 'web.auth.signUpSub' : 'web.auth.signInSub')}</p>
           </div>
-          {signup && firstRun && <p className="rounded-2xl bg-brand-soft px-4 py-3 text-[13.5px] text-content">{t('web.auth.firstSetup')}</p>}
-          {error && <p role="alert" className="rounded-2xl bg-bad/10 text-bad px-4 py-3 text-[13.5px] font-medium">{error}</p>}
+          {signup && firstRun && <p className="rounded-xl bg-brand-soft px-4 py-3 text-[13px] text-content">{t('web.auth.firstSetup')}</p>}
+          {error && <p role="alert" className="rounded-xl bg-bad/10 text-bad px-4 py-3 text-[13px] font-medium">{error}</p>}
           {signup && <Input label={t('web.auth.name')} value={f.name} onChange={set('name')} autoComplete="name" autoFocus />}
           <Input label={t('web.auth.email')} type="email" dir="ltr" value={f.email} onChange={set('email')} autoComplete="email" autoFocus={!signup} />
           {signup && <Input label={t('web.auth.phone')} type="tel" dir="ltr" value={f.phone} onChange={set('phone')} autoComplete="tel" />}
@@ -113,7 +108,7 @@ export default function AuthPage({ mode }: { mode: 'signin' | 'signup' }) {
               {t('web.auth.remember')}
             </label>
           )}
-          <button type="submit" disabled={busy} className="noir-cta h-12 mt-1 rounded-full inline-flex items-center justify-center gap-2 text-[15px] font-medium disabled:opacity-60">
+          <button type="submit" disabled={busy} className="noir-cta h-11 mt-1 rounded-[10px] inline-flex items-center justify-center gap-2 text-[14px] font-medium disabled:opacity-60">
             {busy && <Loader2 size={17} className="animate-spin" />}{t(signup ? 'web.auth.signUp' : 'web.auth.signIn')}
           </button>
           <p className="text-center text-[14px] text-content-muted">

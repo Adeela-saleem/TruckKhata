@@ -54,11 +54,11 @@ export function ExpenseModal({ caseId, expense, onClose }: { caseId: string; exp
       </>}>
       <div className="flex flex-col gap-5">
         <div className="flex flex-col gap-1.5">
-          <span className="text-[13.5px] font-medium text-content-muted">{t('trip.quickCategory')}</span>
+          <span className="text-[13px] font-medium text-content-muted">{t('trip.quickCategory')}</span>
           <div className="flex flex-wrap gap-1.5">
             {labels.map((label) => (
               <button key={label} type="button" aria-pressed={f.category === label} onClick={() => set('category')(label)}
-                className={cn('h-8 px-3 rounded-full text-[13.5px] font-medium border transition-colors',
+                className={cn('h-8 px-3 rounded-[8px] text-[13px] font-medium border transition-colors',
                   f.category === label ? 'bg-brand-soft text-brand-strong border-brand/40' : 'bg-surface border-line text-content-muted hover:text-content hover:bg-surface-2')}>
                 {label}
               </button>
@@ -73,7 +73,7 @@ export function ExpenseModal({ caseId, expense, onClose }: { caseId: string; exp
           <Field label={t('fields.litres')} value={f.quantity} onChange={set('quantity')} inputMode="decimal" />
           <MoneyField required label={t('fields.amount')} value={f.amount} onChange={set('amount')} />
           <AutoValue label={t('fields.rate')} value={rate === null ? '–' : formatPKR(rate)} />
-          <p className="self-end pb-3 text-[12.5px] text-content-subtle">{rate === null ? t('web.trips.noRate') : t('web.trips.rateHint')}</p>
+          <p className="self-end pb-3 text-[12px] text-content-subtle">{rate === null ? t('web.trips.noRate') : t('web.trips.rateHint')}</p>
           <Field label={t('fields.description')} value={f.description} onChange={set('description')} className="sm:col-span-2" />
           <TextArea label={t('fields.notes')} value={f.notes} onChange={set('notes')} className="sm:col-span-2" />
         </div>

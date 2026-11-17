@@ -24,7 +24,7 @@ import { EntryModal } from './EntryModal';
 type Kind = 'all' | 'freight' | 'receipt';
 
 const th = 'h-[48px] px-4 first:ps-6 last:pe-6 text-[13px] font-medium text-content-subtle whitespace-nowrap border-b border-line';
-const td = 'px-4 first:ps-6 last:pe-6 text-[14.5px] text-content whitespace-nowrap';
+const td = 'px-4 first:ps-6 last:pe-6 text-[14px] text-content whitespace-nowrap';
 
 export default function PartyDetail() {
   const { id = '' } = useParams();
@@ -72,7 +72,6 @@ export default function PartyDetail() {
       </>}>
       <div className="max-w-[1800px] flex flex-col gap-5">
         <RecordHeader
-          title={<h2 className="font-display text-[26px] leading-tight font-semibold tracking-[-0.02em] text-content break-words">{p.name}</h2>}
           badges={p.archived_at ? <Badge tone="neutral">{t('party.archived')}</Badge> : undefined}
           meta={<>
             <span dir="ltr" className="tabular-nums">{p.phone ?? t('party.noPhone')}</span>
@@ -152,11 +151,11 @@ export default function PartyDetail() {
                           <span className="w-24 shrink-0 tabular-nums text-[14px] text-content-muted">{formatDate(e.date)}</span>
                           <span className="w-28 shrink-0"><CaseChip caseNo={e.caseNo} highlight={hit(e.caseNo)} /></span>
                           <span className="flex-1 min-w-0 flex items-center gap-2">
-                            <span className="text-[14.5px] font-medium text-content whitespace-nowrap">{t(`ledger.${e.kind}`)}</span>
+                            <span className="text-[14px] font-medium text-content whitespace-nowrap">{t(`ledger.${e.kind}`)}</span>
                             {e.source === 'manual' && <Badge tone="warning">{t('ledger.source_manual')}</Badge>}
-                            {e.note && <span className="min-w-0 truncate text-[13.5px] text-content-subtle">{e.note}</span>}
+                            {e.note && <span className="min-w-0 truncate text-[13px] text-content-subtle">{e.note}</span>}
                           </span>
-                          <Money value={e.amount} sign={owesUs(e) ? '+' : '-'} tone={owesUs(e) ? undefined : 'good'} className="ms-auto text-[15px] font-semibold" />
+                          <Money value={e.amount} sign={owesUs(e) ? '+' : '-'} tone={owesUs(e) ? undefined : 'good'} className="ms-auto text-[14px] font-semibold" />
                         </button>
                       </li>
                     ))}
@@ -174,9 +173,9 @@ export default function PartyDetail() {
               <SumLine label={t('party.fromAda')} value={p.received} sign="-" tone="good" />
               {account.manualPayments > 0 && <SumLine label={t('party.manualPayments')} value={account.manualPayments} sign="-" tone="good" />}
               {account.manualCharges > 0 && <SumLine label={t('party.manualCharges')} value={account.manualCharges} sign="+" />}
-              <div className="mt-3 rounded-2xl bg-surface-2 border border-line px-4 py-3 flex items-baseline justify-between gap-3">
+              <div className="mt-3 rounded-xl bg-surface-2 border border-line px-4 py-3 flex items-baseline justify-between gap-3">
                 <span className="text-[14px] font-semibold text-content">{t('fields.outstanding')}</span>
-                <Money value={p.outstanding} tone={p.outstanding > 0 ? 'bad' : undefined} className="font-display text-[26px] font-semibold tracking-[-0.02em]" />
+                <Money value={p.outstanding} tone={p.outstanding > 0 ? 'bad' : undefined} className="font-display text-[28px] font-semibold tracking-[-0.02em]" />
               </div>
             </SectionCard>
             <SectionCard title={t('web.parties.details')}>

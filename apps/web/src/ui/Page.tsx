@@ -21,7 +21,7 @@ export function Page({ title, subtitle, actions, bar, fit = false, children }: {
       <div className="page-head pt-3 pb-5 flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
         <div className="min-w-0">
           {subtitle && <p className="text-[14px] text-content-muted truncate">{subtitle}</p>}
-          <h1 className="font-display text-[30px] sm:text-[34px] leading-[1.15] tracking-[-0.025em] text-content truncate">{title}</h1>
+          <h1 className="font-display text-[28px] sm:text-[32px] leading-[1.15] tracking-[-0.025em] text-content truncate">{title}</h1>
         </div>
         {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
       </div>

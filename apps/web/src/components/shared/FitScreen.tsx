@@ -55,7 +55,7 @@ export function Pager({ start, end, total, current, pages, onPage }: { start: nu
 export function CardTitle({ name, scope, note, ruled = true }: { name: string; scope?: string; note?: ReactNode; /** A hairline parting the title from the card's content. */ ruled?: boolean }) {
   return (
     <div className={`shrink-0 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 ${ruled ? 'border-b border-line pb-3' : ''}`}>
-      <p className="card-title font-display text-[18px] text-content">
+      <p className="card-title font-display text-[16px] text-content">
         {name}{scope && <span className="font-medium text-content-subtle"> {scope}</span>}
       </p>
       {note && <span className="text-[14px] text-content-muted tabular-nums">{note}</span>}

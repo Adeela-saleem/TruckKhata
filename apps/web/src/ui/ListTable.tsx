@@ -48,9 +48,9 @@ export function ListTable<R>({ title, note, actions, columns, rows, rowKey, onOp
 
   return (
     <section className="card flex flex-col h-full min-h-[420px] fit:min-h-0">
-      <div className="shrink-0 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-6 sm:px-7 pt-5 pb-3">
+      <div className="card-head shrink-0 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-6 sm:px-7 py-4 !border-b-0">
         <div className="flex items-baseline gap-2 min-w-0">
-          <h2 className="card-title font-display text-[18px] text-content">{title}</h2>
+          <h2 className="card-title font-display text-[16px] text-content">{title}</h2>
           {note && <span className="text-[13px] text-content-subtle tabular-nums">{note}</span>}
         </div>
         <div className="flex items-center gap-2">
@@ -66,9 +66,9 @@ export function ListTable<R>({ title, note, actions, columns, rows, rowKey, onOp
           <div className="p-6 flex flex-col gap-3">{[0, 1, 2, 3, 4].map((i) => <Skeleton key={i} className="h-9 w-full" />)}</div>
         ) : list.length === 0 ? (
           <div className="h-full min-h-[240px] flex flex-col items-center justify-center gap-3 text-center px-6">
-            <span className="grid place-items-center w-12 h-12 rounded-2xl bg-surface-2 border border-line text-content-subtle"><Inbox size={22} /></span>
+            <span className="grid place-items-center w-12 h-12 rounded-xl bg-surface-2 border border-line text-content-subtle"><Inbox size={22} /></span>
             <div>
-              <p className="text-[15px] font-medium text-content">{empty.title}</p>
+              <p className="text-[14px] font-medium text-content">{empty.title}</p>
               {empty.hint && <p className="text-[13px] text-content-subtle mt-1 max-w-sm">{empty.hint}</p>}
             </div>
           </div>
@@ -77,11 +77,11 @@ export function ListTable<R>({ title, note, actions, columns, rows, rowKey, onOp
             <thead>
               <tr className="noir-thead">
                 {columns.map((c) => (
-                  <th key={c.key} scope="col" className={cn('h-[56px] px-4 first:ps-6 sm:first:ps-7 last:pe-6 sm:last:pe-7 text-[13px] font-medium text-content-subtle whitespace-nowrap border-b border-line', align(c), hide(c))}>
+                  <th key={c.key} scope="col" className={cn('h-[56px] px-4 first:ps-6 sm:first:ps-7 last:pe-6 sm:last:pe-7 text-[13px] whitespace-nowrap', align(c), hide(c))}>
                     {c.label}
                   </th>
                 ))}
-                {onOpen && <th aria-hidden className="w-10 border-b border-line" />}
+                {onOpen && <th aria-hidden className="w-10" />}
               </tr>
             </thead>
             <tbody>
@@ -91,7 +91,7 @@ export function ListTable<R>({ title, note, actions, columns, rows, rowKey, onOp
                   tabIndex={onOpen ? 0 : undefined}
                   className={cn('noir-row h-[56px] border-b border-line last:border-b-0', onOpen && 'is-link cursor-pointer')}>
                   {columns.map((c) => (
-                    <td key={c.key} className={cn('px-4 first:ps-6 sm:first:ps-7 last:pe-6 sm:last:pe-7 text-[14.5px] text-content whitespace-nowrap', align(c), hide(c), c.className)}>
+                    <td key={c.key} className={cn('px-4 first:ps-6 sm:first:ps-7 last:pe-6 sm:last:pe-7 text-[14px] text-content whitespace-nowrap', align(c), hide(c), c.className)}>
                       {c.render(row)}
                     </td>
                   ))}
@@ -101,9 +101,9 @@ export function ListTable<R>({ title, note, actions, columns, rows, rowKey, onOp
             </tbody>
             {footer && (
               <tfoot>
-                <tr className="h-[56px] bg-surface-2 border-t border-line">
+                <tr className="h-[56px] bg-card-head border-t-2 border-line-strong">
                   {columns.map((c, i) => (
-                    <td key={c.key} className={cn('px-4 first:ps-6 sm:first:ps-7 last:pe-6 sm:last:pe-7 text-[14.5px] font-semibold text-content whitespace-nowrap', align(c), hide(c))}>{footer[i]}</td>
+                    <td key={c.key} className={cn('px-4 first:ps-6 sm:first:ps-7 last:pe-6 sm:last:pe-7 text-[14px] font-semibold text-content whitespace-nowrap', align(c), hide(c))}>{footer[i]}</td>
                   ))}
                   {onOpen && <td />}
                 </tr>

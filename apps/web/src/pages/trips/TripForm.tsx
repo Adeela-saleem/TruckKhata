@@ -25,12 +25,10 @@ export default function TripForm() {
   const [params] = useSearchParams();
   const { values: f, set, setValues } = useForm({
     caseNo: params.get('caseNo') ?? '', direction: (params.get('direction') === 'return' ? 'return' : 'outward') as Direction, date: today(),
-    vehicle: '', from: '', to: '', party: '', freight: '', weight: '', items: '',
+    vehicle: '', from: '', to: '', party: '', freight: '', driver: '', advance: '', weight: '', items: '',
   });
   const [loaded, setLoaded] = useState(!legId);
   const [known, setKnown] = useState<Known>(null);
-  // Driver and advance are no longer asked for (client request); an older trip keeps what it had.
-  const [kept, setKept] = useState<{ driver?: string; advance?: number | null }>({});
   const { data: parties } = useData(partyNames);
 
   useEffect(() => {
@@ -40,9 +38,9 @@ export default function TripForm() {
       const view = await getCaseView(db, l.case_id);
       setValues({
         caseNo: l.case_no, direction: l.direction, date: l.trip_date, vehicle: l.vehicle ?? '', from: l.from_place ?? '', to: l.to_place ?? '',
-        party: l.party_name ?? '', freight: moneyToInput(view?.caseRow.cycle_freight), weight: l.weight ?? '', items: l.item_details ?? '',
+        party: l.party_name ?? '', freight: moneyToInput(view?.caseRow.cycle_freight), driver: l.driver ?? '', advance: moneyToInput(l.advance),
+        weight: l.weight ?? '', items: l.item_details ?? '',
       });
-      setKept({ driver: l.driver ?? undefined, advance: l.advance });
       setLoaded(true);
     });
   }, [db, legId, setValues]);
@@ -69,6 +67,7 @@ export default function TripForm() {
         party: v.party || (outward?.party_name ?? ada?.party_name ?? ''),
         from: v.from || (swap ? end : start),
         to: v.to || (swap ? start : end),
+        driver: v.driver || (outward?.driver ?? ''),
         freight: v.freight || moneyToInput(view.caseRow.cycle_freight ?? (adaFreight || null)),
       }));
     })();
@@ -80,7 +79,7 @@ export default function TripForm() {
     return run(async () => {
       const caseId = await saveLeg(db, {
         caseNo: f.caseNo, direction: f.direction, date: f.date, vehicle: f.vehicle, fromPlace: f.from, toPlace: f.to, partyName: f.party,
-        weight: f.weight, itemDetails: f.items, cycleFreight: moneyOrNull(f.freight), ...kept,
+        driver: f.driver, advance: moneyOrNull(f.advance), weight: f.weight, itemDetails: f.items, cycleFreight: moneyOrNull(f.freight),
       }, legId);
       toast.success(t('web.saved'));
       navigate(`/trips/${caseId}`, { replace: true });
@@ -103,6 +102,8 @@ export default function TripForm() {
             <Field label={t('fields.from')} value={f.from} onChange={set('from')} />
             <Field label={t('fields.to')} value={f.to} onChange={set('to')} />
             <SuggestField label={t('fields.broker')} value={f.party} onChange={set('party')} suggestions={parties ?? []} />
+            <Field label={t('fields.driver')} value={f.driver} onChange={set('driver')} />
+            <MoneyField label={t('fields.advance')} value={f.advance} onChange={set('advance')} />
           </FormSection>
 
           <FormSection title={t('web.trips.loadSection')}>
@@ -115,8 +116,8 @@ export default function TripForm() {
 
         <aside className="xl:col-span-4 xl:sticky xl:top-5 flex flex-col gap-4">
           <section className="card px-6 py-5">
-            <div className="flex items-baseline justify-between gap-3 border-b border-line pb-3 mb-4">
-              <h2 className="card-title font-display text-[18px] text-content">{t('web.trips.summaryTitle')}</h2>
+            <div className="flex items-baseline justify-between gap-3 card-head -mx-6 -mt-5 mb-4 px-6 py-4">
+              <h2 className="card-title font-display text-[16px] text-content">{t('web.trips.summaryTitle')}</h2>
               <span className="text-[13px] text-content-subtle">{t('web.trips.summaryNote')}</span>
             </div>
             <div className="flex flex-wrap items-center gap-2">
@@ -125,9 +126,9 @@ export default function TripForm() {
               {known && <StatusBadge status={known.summary.status} />}
             </div>
             {(f.from || f.to) && <p className="mt-3 text-[14px] text-content-muted">{[f.from, f.to].filter(Boolean).join(' → ')}</p>}
-            <div className="mt-4 flex items-baseline justify-between gap-4 rounded-2xl bg-surface-2 border border-line px-4 py-3">
+            <div className="mt-4 flex items-baseline justify-between gap-4 rounded-xl bg-surface-2 border border-line px-4 py-3">
               <span className="text-[14px] font-semibold text-content">{t('fields.cycleFreight')}</span>
-              <Money value={parseMoney(f.freight) ?? 0} className="font-display text-[22px] font-semibold tracking-[-0.02em]" />
+              <Money value={parseMoney(f.freight) ?? 0} className="font-display text-[20px] font-semibold tracking-[-0.02em]" />
             </div>
             {f.caseNo.trim() && (
               <div className="mt-4">

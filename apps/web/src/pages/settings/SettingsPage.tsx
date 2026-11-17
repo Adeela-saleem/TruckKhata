@@ -83,13 +83,13 @@ function CompanyTab() {
         </FormSection>
         <FormSection title={t('settings.logo')} note={t('settings.logoHint')} columns={1}>
           <div className="flex flex-wrap items-center gap-5">
-            <div className="grid place-items-center w-28 h-28 rounded-2xl border border-line bg-surface-2 overflow-hidden shrink-0">
+            <div className="grid place-items-center w-28 h-28 rounded-xl border border-line bg-surface-2 overflow-hidden shrink-0">
               {f.logo
                 ? <img src={f.logo} alt={t('settings.logo')} className="max-w-full max-h-full object-contain p-2" />
                 : <ImagePlus size={24} className="text-content-subtle" />}
             </div>
             <div className="flex flex-col gap-3 min-w-0 flex-1">
-              <p className="text-[13.5px] text-content-muted">{f.logo ? t('web.settings.logoSize') : t('web.settings.logoNone')}</p>
+              <p className="text-[13px] text-content-muted">{f.logo ? t('web.settings.logoSize') : t('web.settings.logoNone')}</p>
               <div className="flex flex-wrap gap-2">
                 <Btn icon={<ImagePlus size={16} />} onClick={pick} disabled={busy}>{f.logo ? t('web.settings.changeLogo') : t('actions.chooseLogo')}</Btn>
                 {f.logo && <Btn tone="quiet" icon={<X size={16} />} onClick={() => set('logo')(null)}>{t('actions.removeFile')}</Btn>}
@@ -146,7 +146,7 @@ function PreferencesTab() {
             <Field label={t('fields.reminderDays')} value={days} onChange={setDays} inputMode="numeric" className="w-full sm:w-80" />
             <Btn tone="primary" type="submit" icon={<Save size={16} />} busy={busy} disabled={!days} className="h-11">{t('actions.save')}</Btn>
           </div>
-          <p className="mt-2 text-[12.5px] text-content-subtle">{t('web.settings.reminderHint')}</p>
+          <p className="mt-2 text-[12px] text-content-subtle">{t('web.settings.reminderHint')}</p>
         </SectionCard>
       </form>
     </div>
@@ -187,7 +187,7 @@ function BackupTab() {
     <div className="max-w-[860px] flex flex-col gap-5">
         <SectionCard title={t('backup.title')}>
           <div className="flex flex-col gap-4">
-            <p className="text-[14.5px] leading-relaxed text-content">{t('web.settings.browserOnly')}</p>
+            <p className="text-[14px] leading-relaxed text-content">{t('web.settings.browserOnly')}</p>
             <p className="text-[14px] leading-relaxed text-content-muted">{t('web.settings.backupAdvice')}</p>
             {stale && <Note tone="warn">{last ? t('web.settings.stale') : t('backup.never')}</Note>}
           </div>

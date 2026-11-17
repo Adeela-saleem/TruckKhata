@@ -15,14 +15,14 @@ import { EmptyState } from '../../components/shared/states';
 import { Badge } from '../../components/ui/Badge';
 import { cn } from '../../components/ui/cn';
 import { downloadText } from '../../platform/files';
-import { Btn, CaseChip, DirectionBadge, Money, Note, SectionCard, StatusBadge } from '../../ui/bits';
+import { Btn, DirectionBadge, Money, Note, SectionCard, StatusBadge } from '../../ui/bits';
 import { Page } from '../../ui/Page';
 import { HistoryCard, PrintButton, useDelete } from '../../ui/record';
 import { RecordHeader } from '../../ui/RecordHeader';
 import { ExpenseModal } from './ExpenseModal';
 
 const th = 'h-11 px-4 first:ps-6 last:pe-6 text-[13px] font-medium text-content-subtle whitespace-nowrap border-b border-line';
-const td = 'px-4 first:ps-6 last:pe-6 text-[14.5px] text-content whitespace-nowrap';
+const td = 'px-4 first:ps-6 last:pe-6 text-[14px] text-content whitespace-nowrap';
 
 export default function CaseSheet() {
   const { caseId = '' } = useParams();
@@ -45,6 +45,10 @@ export default function CaseSheet() {
   const counted = v.bills.filter((b) => b.count_in_profit);
   const notCounted = v.bills.filter((b) => !b.count_in_profit);
   const doc = () => caseDocument(v, t);
+  // Driver and advance show on screen as in the app, but stay off the printed sheet (client request).
+  const driver = [...new Set(v.legs.map((l) => l.driver?.trim()).filter(Boolean))].join(', ');
+  const advances = v.legs.filter((l) => l.advance !== null);
+  const advance = advances.length ? advances.reduce((n, l) => n + (l.advance ?? 0), 0) : null;
 
   const complete = () => run(async () => {
     if (!(await confirm(t('trip.completeTitle'), t('trip.completeMessage', { profit: formatPKR(s.profit) }), t('trip.markComplete')))) return;
@@ -66,12 +70,13 @@ export default function CaseSheet() {
       </>}>
       <div className="max-w-[1800px]">
         <RecordHeader
-          title={<CaseChip caseNo={caseNo} className="h-9 px-3 text-[20px]" />}
           badges={<StatusBadge status={s.status} />}
           meta={<>
             {h.vehicle && <span dir="ltr" className="font-mono text-content">{h.vehicle}</span>}
             {(h.from || h.to) && <>{h.vehicle && ' · '}{[h.from, h.to].filter(Boolean).join(' → ')}</>}
             {h.broker && <>{(h.vehicle || h.from || h.to) && ' · '}{h.broker}</>}
+            {driver && <>{(h.vehicle || h.from || h.to || h.broker) && ' · '}{t('fields.driver')}: <span className="text-content">{driver}</span></>}
+            {advance !== null && <>{' · '}{t('fields.advance')}: <span dir="ltr" className="text-content tabular-nums">{formatPKR(advance)}</span></>}
           </>}
           aside={s.confirmed
             ? <Btn icon={<LockOpen size={16} />} disabled={busy} onClick={reopen}>{t('trip.reopen')}</Btn>
@@ -118,11 +123,11 @@ export default function CaseSheet() {
                               <td className={cn(td, 'font-medium')}>
                                 <span className="inline-flex items-baseline gap-2">
                                   <span>{e.category}</span>
-                                  <span className="text-[12.5px] font-normal text-content-subtle tabular-nums">{formatDate(e.expense_date)}</span>
+                                  <span className="text-[12px] font-normal text-content-subtle tabular-nums">{formatDate(e.expense_date)}</span>
                                 </span>
                               </td>
                               <td className={cn(td, 'text-content-muted')}><span className="block max-w-[200px] truncate">{e.vendor ?? '–'}</span></td>
-                              <td className={cn(td, 'font-mono text-[13.5px] text-content-muted')} dir="ltr">{e.slip_no ?? '–'}</td>
+                              <td className={cn(td, 'font-mono text-[13px] text-content-muted')} dir="ltr">{e.slip_no ?? '–'}</td>
                               <td className={cn(td, 'text-end tabular-nums text-content-muted')}>{e.quantity ?? '–'}</td>
                               <td className={cn(td, 'text-end')}><Money value={e.amount} className="font-medium" /></td>
                               <td className={cn(td, 'text-end')}>{rate === null ? <span className="text-content-subtle">–</span> : <Money value={rate} tone="muted" />}</td>
@@ -172,9 +177,9 @@ export default function CaseSheet() {
                   {notCounted.map((b) => (
                     <li key={b.id}>
                       <Link to={`/bills/${b.id}`} className="noir-row flex items-center gap-4 px-6 h-[56px]">
-                        <span className="flex-1 min-w-0 truncate text-[14.5px] font-medium text-content">{b.vendor}</span>
+                        <span className="flex-1 min-w-0 truncate text-[14px] font-medium text-content">{b.vendor}</span>
                         <Badge>{t('trip.notCounted')}</Badge>
-                        <Money value={b.total} className="text-[14.5px]" />
+                        <Money value={b.total} className="text-[14px]" />
                       </Link>
                     </li>
                   ))}
@@ -188,8 +193,8 @@ export default function CaseSheet() {
                   {v.adjustments.map((j) => (
                     <li key={j.id}>
                       <Link to={`/parties/${j.party_id}`} className="noir-row flex items-center gap-4 px-6 h-[56px]">
-                        <span className="flex-1 min-w-0 truncate text-[14.5px] text-content">{j.party_name} <span className="text-content-subtle">({t(`ledger.${j.kind}`)})</span></span>
-                        <Money value={j.amount} className="text-[14.5px]" />
+                        <span className="flex-1 min-w-0 truncate text-[14px] text-content">{j.party_name} <span className="text-content-subtle">({t(`ledger.${j.kind}`)})</span></span>
+                        <Money value={j.amount} className="text-[14px]" />
                       </Link>
                     </li>
                   ))}
@@ -216,31 +221,31 @@ function SheetTotals({ st, confirmed, hasAda }: { st: ReturnType<typeof sheetTot
   const line = (label: string, value: number, opts: { sign?: string; strong?: boolean } = {}) => (
     <div className={cn('flex items-baseline justify-between gap-4 py-1.5', opts.strong && 'border-t border-white/25 mt-1 pt-2.5')}>
       <span className={cn('text-[14px]', opts.strong ? 'font-semibold text-white' : 'text-white/80')}>{label}</span>
-      <span dir="ltr" className={cn('tabular-nums whitespace-nowrap text-white', opts.strong ? 'text-[16px] font-semibold' : 'text-[14.5px]')}>
+      <span dir="ltr" className={cn('tabular-nums whitespace-nowrap text-white', opts.strong ? 'text-[16px] font-semibold' : 'text-[14px]')}>
         {opts.sign ? `${opts.sign} ` : ''}{formatPKR(value)}
       </span>
     </div>
   );
   return (
-    <section className="noir-hero relative overflow-hidden rounded-[28px] p-6 text-white">
-      <p className="font-display text-[17px] font-semibold tracking-tight">{t('trip.summary')}</p>
+    <section className="noir-hero relative overflow-hidden rounded-[20px] p-6 text-white">
+      <p className="font-display text-[16px] font-semibold tracking-tight">{t('trip.summary')}</p>
       <div className="mt-4">
         {line(t('trip.outwardFreight'), st.outwardFreight)}
         {line(t('trip.returnFreight'), st.returnFreight)}
         {line(t('trip.cycleFreight'), st.freight, { strong: true })}
         {line(t('web.trips.totalExpenses'), st.expenses, { sign: '-' })}
       </div>
-      <div className="mt-4 rounded-2xl bg-white/[0.12] border border-white/15 px-4 py-3.5">
+      <div className="mt-4 rounded-xl bg-white/[0.06] border border-white/10 px-4 py-3.5">
         <div className="flex items-center justify-between gap-3">
           <span className="text-[14px] font-semibold">{t('trip.net')}</span>
-          <span className="inline-flex items-center h-6 px-2 rounded-md bg-white/20 text-[12.5px] font-medium">
+          <span className="inline-flex items-center h-6 px-2 rounded-md bg-[#C1F11D] text-[#111214] text-[12px] font-semibold">
             {t(confirmed ? 'trip.confirmed' : 'trip.provisional')}
           </span>
         </div>
-        <span dir="ltr" className={cn('mt-2 block font-display text-[38px] leading-none font-semibold tracking-[-0.03em] tabular-nums', st.profit < 0 && 'text-rose-100')}>
+        <span dir="ltr" className={cn('mt-2 block font-display text-[36px] leading-none font-semibold tracking-[-0.03em] tabular-nums', st.profit < 0 ? 'text-rose-300' : 'hero-accent')}>
           {formatPKR(st.profit)}
         </span>
-        {!confirmed && <p className="mt-2 text-[12.5px] text-white/75">{t('trip.notConfirmed')}</p>}
+        {!confirmed && <p className="mt-2 text-[12px] text-white/75">{t('trip.notConfirmed')}</p>}
       </div>
       {hasAda && (
         <div className="mt-4">
@@ -258,14 +263,14 @@ function AdaFiles({ direction, entries, caseNo }: { direction: Direction; entrie
   const title = t(direction === 'outward' ? 'trip.market' : 'trip.returnLoad');
   if (entries.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-line-strong px-5 py-4 flex flex-col gap-3">
+      <div className="rounded-xl border border-dashed border-line-strong px-5 py-4 flex flex-col gap-3">
         <div className="flex items-center justify-between gap-2">
-          <span className="text-[14.5px] font-semibold text-content">{title}</span>
+          <span className="text-[14px] font-semibold text-content">{title}</span>
           <DirectionBadge direction={direction} />
         </div>
-        <p className="text-[13.5px] text-content-subtle">{t('trip.notAdded')}</p>
+        <p className="text-[13px] text-content-subtle">{t('trip.notAdded')}</p>
         <Link to={`/ada/new?caseNo=${encodeURIComponent(caseNo)}&direction=${direction}`}
-          className="self-start inline-flex items-center gap-2 h-9 px-3.5 rounded-full border border-line bg-surface hover:bg-surface-2 text-[13.5px] font-medium text-content">
+          className="self-start inline-flex items-center gap-2 h-9 px-3.5 rounded-[10px] border border-line bg-surface hover:bg-surface-2 text-[13px] font-medium text-content">
           <Plus size={16} />{t(direction === 'outward' ? 'trip.addOutwardAda' : 'trip.addReturnAda')}
         </Link>
       </div>
@@ -274,9 +279,9 @@ function AdaFiles({ direction, entries, caseNo }: { direction: Direction; entrie
   return (
     <div className="flex flex-col gap-3">
       {entries.map((a) => (
-        <Link key={a.id} to={`/ada/${a.id}`} className="card-hover rounded-2xl border border-line bg-surface-2/50 px-5 py-4 flex flex-col gap-3">
+        <Link key={a.id} to={`/ada/${a.id}`} className="card-hover rounded-xl border border-line bg-surface-2/50 px-5 py-4 flex flex-col gap-3">
           <div className="flex items-center justify-between gap-2">
-            <span className="text-[14.5px] font-semibold text-content">{title}</span>
+            <span className="text-[14px] font-semibold text-content">{title}</span>
             <DirectionBadge direction={direction} />
           </div>
           <p className="text-[13px] text-content-muted truncate">
@@ -300,12 +305,16 @@ function AdaFiles({ direction, entries, caseNo }: { direction: Direction; entrie
 
 function LegRow({ leg, onEdit, onDelete }: { leg: Leg; onEdit: () => void; onDelete: () => void }) {
   const { t } = useApp();
-  const details = [leg.weight, leg.item_details].filter(Boolean).join(' · ');
+  const details = [
+    leg.driver && `${t('fields.driver')}: ${leg.driver}`,
+    leg.advance !== null && `${t('fields.advance')}: ${formatPKR(leg.advance)}`,
+    leg.weight, leg.item_details,
+  ].filter(Boolean).join(' · ');
   return (
     <li className="flex flex-wrap items-center gap-x-4 gap-y-2 px-6 py-3.5">
       <span className="w-24 shrink-0"><DirectionBadge direction={leg.direction} /></span>
       <div className="flex-1 min-w-[180px]">
-        <p className="text-[14.5px] text-content">
+        <p className="text-[14px] text-content">
           <span className="tabular-nums">{formatDate(leg.trip_date)}</span>
           {leg.vehicle && <> · <span dir="ltr" className="font-mono">{leg.vehicle}</span></>}
           {(leg.from_place || leg.to_place) && <> · {[leg.from_place, leg.to_place].filter(Boolean).join(' → ')}</>}

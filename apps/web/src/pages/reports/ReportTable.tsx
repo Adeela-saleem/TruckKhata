@@ -54,9 +54,9 @@ export function ReportTable({ title, note, report, highlight, empty, actions }: 
 
   return (
     <section className="card flex flex-col h-full min-h-[360px] fit:min-h-0 overflow-hidden">
-      <div className="shrink-0 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-6 py-3.5 border-b border-line">
+      <div className="shrink-0 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-6 py-4 card-head">
         <div className="flex items-baseline gap-2 min-w-0">
-          <h2 className="card-title font-display text-[18px] text-content">{title}</h2>
+          <h2 className="card-title font-display text-[16px] text-content">{title}</h2>
           {note && <span className="text-[13px] text-content-subtle tabular-nums">{note}</span>}
         </div>
         {actions}
@@ -66,9 +66,9 @@ export function ReportTable({ title, note, report, highlight, empty, actions }: 
           <div className="p-6 flex flex-col gap-3">{[0, 1, 2, 3, 4].map((i) => <Skeleton key={i} className="h-9 w-full" />)}</div>
         ) : rows.length === 0 ? (
           <div className="h-full min-h-[240px] flex flex-col items-center justify-center gap-3 text-center px-6">
-            <span className="grid place-items-center w-12 h-12 rounded-2xl bg-surface-2 border border-line text-content-subtle"><Inbox size={22} /></span>
+            <span className="grid place-items-center w-12 h-12 rounded-xl bg-surface-2 border border-line text-content-subtle"><Inbox size={22} /></span>
             <div>
-              <p className="text-[15px] font-medium text-content">{empty.title}</p>
+              <p className="text-[14px] font-medium text-content">{empty.title}</p>
               {empty.hint && <p className="text-[13px] text-content-subtle mt-1 max-w-sm">{empty.hint}</p>}
             </div>
           </div>
@@ -87,7 +87,7 @@ export function ReportTable({ title, note, report, highlight, empty, actions }: 
               {rows.map((row, i) => (
                 <tr key={i} className="noir-row h-[52px]">
                   {report.columns.map((c) => (
-                    <td key={c.key} className={cn('px-4 first:ps-6 last:pe-6 text-[14.5px] text-content whitespace-nowrap border-b border-line', align(c))}>
+                    <td key={c.key} className={cn('px-4 first:ps-6 last:pe-6 text-[14px] text-content whitespace-nowrap border-b border-line', align(c))}>
                       <Cell col={c} row={row} highlight={highlight} />
                     </td>
                   ))}
@@ -98,7 +98,7 @@ export function ReportTable({ title, note, report, highlight, empty, actions }: 
               <tfoot className="sticky bottom-0 z-[1]">
                 <tr className="h-[52px]">
                   {report.columns.map((c, i) => (
-                    <td key={c.key} className={cn('px-4 first:ps-6 last:pe-6 bg-surface-2 text-[14.5px] font-semibold text-content whitespace-nowrap border-t border-line-strong', align(c))}>
+                    <td key={c.key} className={cn('px-4 first:ps-6 last:pe-6 bg-surface-2 text-[14px] font-semibold text-content whitespace-nowrap border-t border-line-strong', align(c))}>
                       {c.type === 'money'
                         ? <Money value={sum(rows.map((r) => Number(r[c.key] ?? 0)))} tone={c.key === 'profit' ? 'auto' : undefined} />
                         : i === 0 && firstMoney !== 0 ? t('web.list.total') : ''}

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 export type Theme = 'light' | 'dark'
-const META_COLOR: Record<Theme, string> = { light: '#F7F8FA', dark: '#0B0D10' }
+const META_COLOR: Record<Theme, string> = { light: '#EEEFEC', dark: '#0A0B0C' }
 
 function current(): Theme {
   if (typeof document === 'undefined') return 'light'

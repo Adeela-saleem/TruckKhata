@@ -32,10 +32,10 @@ export function Modal({ open, onClose, title, description, children, footer, siz
           className={cn('modal-panel card relative w-full flex flex-col shadow-[0_24px_60px_-20px_rgb(var(--shadow)/0.35)] max-h-[calc(min(90vh,100vh-2rem)/var(--ui-zoom))]', widths[size])}>
           <div className="flex items-start justify-between gap-4 px-6 pt-5 pb-4 flex-shrink-0">
             <div className="min-w-0">
-              <h2 className="font-display text-[19px] font-medium text-content">{title}</h2>
+              <h2 className="font-display text-[20px] font-medium text-content">{title}</h2>
               {description && <p className="text-[14px] text-content-subtle mt-1">{description}</p>}
             </div>
-            <button type="button" onClick={onClose} aria-label="Close" className="w-9 h-9 rounded-full grid place-items-center text-content-subtle hover:text-content hover:bg-surface-2 transition-colors">
+            <button type="button" onClick={onClose} aria-label="Close" className="w-9 h-9 rounded-[8px] grid place-items-center text-content-subtle hover:text-content hover:bg-surface-2 transition-colors">
               <X size={17} />
             </button>
           </div>

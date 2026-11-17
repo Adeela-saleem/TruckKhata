@@ -175,8 +175,8 @@ export default function AdaForm() {
         {/* The worked-out totals stay in view while typing. */}
         <aside className="xl:col-span-4 xl:sticky xl:top-5 flex flex-col gap-4">
           <section className="card px-6 py-5">
-            <div className="flex items-baseline justify-between border-b border-line pb-3 mb-2">
-              <h2 className="card-title font-display text-[18px] text-content">{t('web.ada.calc')}</h2>
+            <div className="flex items-baseline justify-between card-head -mx-6 -mt-5 mb-4 px-6 py-4">
+              <h2 className="card-title font-display text-[16px] text-content">{t('web.ada.calc')}</h2>
               <span className="text-[13px] text-content-subtle">{t('web.ada.calcNote')}</span>
             </div>
             <SumLine label={t('fields.freightRate')} value={parseMoney(f.freight) ?? 0} />
@@ -186,11 +186,11 @@ export default function AdaForm() {
             <SumLine label={`${t('fields.dihariTotal')} (${t(`adjust.${f.dihariMode}`)})`} value={preview.dihari} sign={f.dihariMode === 'deduct' ? '-' : '+'} />
             <SumLine label={t('fields.due')} value={preview.due} total />
             <SumLine label={t('fields.received')} value={parseMoney(f.received) ?? 0} sign="-" tone="good" />
-            <div className="mt-3 rounded-2xl bg-surface-2 border border-line px-4 py-3 flex items-baseline justify-between">
+            <div className="mt-3 rounded-xl bg-surface-2 border border-line px-4 py-3 flex items-baseline justify-between">
               <span className="text-[14px] font-semibold text-content">{t('fields.balance')}</span>
-              <Money value={preview.balance} tone={preview.balance > 0 ? 'bad' : undefined} className="font-display text-[26px] font-semibold tracking-[-0.02em]" />
+              <Money value={preview.balance} tone={preview.balance > 0 ? 'bad' : undefined} className="font-display text-[28px] font-semibold tracking-[-0.02em]" />
             </div>
-            <p className="mt-3 text-[12.5px] text-content-subtle leading-relaxed">{t('ada.dueHint')}</p>
+            <p className="mt-3 text-[12px] text-content-subtle leading-relaxed">{t('ada.dueHint')}</p>
           </section>
           <div className="flex gap-2 justify-end">
             <Btn onClick={() => navigate(-1)}>{t('actions.cancel')}</Btn>

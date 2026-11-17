@@ -7,7 +7,7 @@ import { adaDocument } from '../../core/print/documents';
 import { getAda, listReceipts, type Receipt } from '../../core/repo/ada';
 import { useApp, useData } from '../../app/context';
 import { EmptyState } from '../../components/shared/states';
-import { Btn, CaseChip, DirectionBadge, Facts, Money, SectionCard, SumLine } from '../../ui/bits';
+import { Btn, DirectionBadge, Facts, Money, SectionCard, SumLine } from '../../ui/bits';
 import { Page } from '../../ui/Page';
 import { DeleteButton, HistoryCard, PrintButton } from '../../ui/record';
 import { RecordHeader } from '../../ui/RecordHeader';
@@ -40,7 +40,6 @@ export default function AdaDetail() {
       </>}>
       <div className="max-w-[1800px]">
         <RecordHeader
-          title={<CaseChip caseNo={a.case_no} className="h-9 px-3 text-[20px]" />}
           badges={<DirectionBadge direction={a.direction} />}
           meta={<>{formatDate(a.entry_date)}{a.party_name && <> · {a.party_name}</>}{(a.from_place || a.to_place) && <> · {[a.from_place, a.to_place].filter(Boolean).join(' → ')}</>}</>}
           aside={
@@ -74,9 +73,9 @@ export default function AdaDetail() {
                     {data.receipts.map((r) => (
                       <li key={r.id}>
                         <button type="button" onClick={() => setReceipt(r)} className="noir-row w-full flex items-center gap-4 px-6 h-[56px] text-start">
-                          <span className="w-28 tabular-nums text-[14.5px] text-content">{formatDate(r.receipt_date)}</span>
+                          <span className="w-28 tabular-nums text-[14px] text-content">{formatDate(r.receipt_date)}</span>
                           <span className="flex-1 min-w-0 truncate text-[14px] text-content-muted">{r.note}</span>
-                          <Money value={r.amount} sign="+" tone="good" className="text-[15px] font-semibold" />
+                          <Money value={r.amount} sign="+" tone="good" className="text-[14px] font-semibold" />
                         </button>
                       </li>
                     ))}
@@ -100,15 +99,15 @@ export default function AdaDetail() {
               )}
               <SumLine label={t('fields.due')} value={a.due} total />
               <SumLine label={t('fields.received')} value={a.received} sign="-" tone="good" />
-              <div className="mt-3 rounded-2xl bg-surface-2 border border-line px-4 py-3 flex items-baseline justify-between">
+              <div className="mt-3 rounded-xl bg-surface-2 border border-line px-4 py-3 flex items-baseline justify-between">
                 <span className="text-[14px] font-semibold text-content">{t('fields.balance')}</span>
-                <Money value={a.balance} tone={a.balance > 0 ? 'bad' : undefined} className="font-display text-[26px] font-semibold tracking-[-0.02em]" />
+                <Money value={a.balance} tone={a.balance > 0 ? 'bad' : undefined} className="font-display text-[28px] font-semibold tracking-[-0.02em]" />
               </div>
             </SectionCard>
             {a.party_id && (
               <Link to={`/parties/${a.party_id}`} className="card card-hover px-6 py-4 flex items-center justify-between">
                 <span className="text-[14px] text-content-muted">{t('party.statement')}</span>
-                <span className="text-[14.5px] font-medium text-content">{a.party_name}</span>
+                <span className="text-[14px] font-medium text-content">{a.party_name}</span>
               </Link>
             )}
           </aside>

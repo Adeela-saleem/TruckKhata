@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
-import { ArrowDownLeft, ArrowUpRight, Loader2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowDownLeft, ArrowUpRight, Loader2, Plus } from 'lucide-react';
 import type { CycleStatus, Direction, InsuranceStatus } from '../core/domain/calc';
 import { formatPKR } from '../core/domain/money';
 import { Badge } from '../components/ui/Badge';
@@ -13,7 +14,7 @@ import { useApp } from '../app/context';
 export function CaseChip({ caseNo, highlight, className }: { caseNo: string | null | undefined; highlight?: boolean; className?: string }) {
   if (!caseNo) return <span className="text-content-subtle">–</span>;
   return (
-    <span dir="ltr" className={cn('case-chip inline-flex items-center h-7 px-2.5 rounded-lg font-mono text-[13.5px] font-semibold tracking-wide whitespace-nowrap',
+    <span dir="ltr" className={cn('case-chip inline-flex items-center h-7 px-2.5 rounded-lg font-mono text-[13px] font-semibold tracking-wide whitespace-nowrap',
       highlight ? 'case-chip--hit' : '', className)}>
       {caseNo}
     </span>
@@ -68,7 +69,7 @@ export function Facts({ items, columns = 3 }: { items: { label: string; value: R
       {shown.map((i) => (
         <div key={i.label} className="min-w-0">
           <dt className="text-[13px] text-content-subtle">{i.label}</dt>
-          <dd className="mt-0.5 text-[15px] font-medium text-content break-words">{i.value}</dd>
+          <dd className="mt-0.5 text-[14px] font-medium text-content break-words">{i.value}</dd>
         </div>
       ))}
     </dl>
@@ -80,7 +81,7 @@ export function SumLine({ label, value, sign, total, tone }: { label: string; va
   return (
     <div className={cn('flex items-baseline justify-between gap-4 py-2', total ? 'border-t border-line-strong mt-1 pt-3' : '')}>
       <span className={cn('text-[14px]', total ? 'font-semibold text-content' : 'text-content-muted')}>{label}</span>
-      <Money value={value} sign={sign} tone={tone} className={cn(total ? 'text-[17px] font-semibold text-content' : 'text-[14.5px] text-content')} />
+      <Money value={value} sign={sign} tone={tone} className={cn(total ? 'text-[16px] font-semibold text-content' : 'text-[14px] text-content')} />
     </div>
   );
 }
@@ -90,14 +91,14 @@ export function SectionCard({ title, note, action, children, padded = true, clas
 }) {
   return (
     <section className={cn('card', className)}>
-      <div className={cn('flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-6 sm:px-7 pt-5', padded ? 'pb-1' : 'pb-4 border-b border-line')}>
+      <div className="card-head flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-6 sm:px-7 py-4 min-h-[64px]">
         <div className="flex items-baseline gap-2 min-w-0">
-          <h2 className="card-title font-display text-[18px] text-content">{title}</h2>
+          <h2 className="card-title font-display text-[16px] text-content">{title}</h2>
           {note && <span className="text-[13px] text-content-subtle tabular-nums">{note}</span>}
         </div>
         {action}
       </div>
-      <div className={padded ? 'px-6 sm:px-7 pt-4 pb-6' : ''}>{children}</div>
+      <div className={padded ? 'px-6 sm:px-7 pt-5 pb-6' : ''}>{children}</div>
     </section>
   );
 }
@@ -110,26 +111,32 @@ export function Btn({ children, onClick, tone = 'plain', type = 'button', disabl
   busy?: boolean;
 }) {
   const tones = {
-    primary: 'noir-cta text-white',
+    primary: 'noir-cta',
     plain: 'bg-surface text-content shadow-[0_1px_2px_rgb(var(--shadow)/0.05)] ring-1 ring-line hover:bg-surface-2',
     quiet: 'text-content-muted hover:text-content hover:bg-surface-2',
     danger: 'bg-surface text-bad ring-1 ring-line hover:bg-bad/5',
   };
   return (
     <button type={type} onClick={onClick} disabled={disabled || busy} title={title} aria-label={!children ? title : undefined} aria-busy={busy || undefined}
-      className={cn('btn-press inline-flex items-center justify-center gap-2 h-11 rounded-full text-[14.5px] font-medium disabled:opacity-50 disabled:pointer-events-none whitespace-nowrap',
-        children ? 'px-5' : 'w-11', tones[tone], className)}>
+      className={cn('btn-press inline-flex items-center justify-center gap-2 h-10 rounded-[10px] text-[14px] font-medium disabled:opacity-50 disabled:pointer-events-none whitespace-nowrap',
+        children ? 'px-4' : 'w-10', tones[tone], className)}>
       {busy ? <Loader2 size={16} className="animate-spin" /> : icon}{children}
     </button>
   );
 }
 
+/** The page's own add button: each tab adds its own kind of record. */
+export function AddButton({ to, label }: { to: string; label: string }) {
+  const navigate = useNavigate();
+  return <Btn tone="primary" icon={<Plus size={17} strokeWidth={2.2} />} onClick={() => navigate(to)}>{label}</Btn>;
+}
+
 export function Note({ children, tone = 'info' }: { children: ReactNode; tone?: 'info' | 'warn' }) {
   return (
-    <div className={cn('rounded-2xl px-5 py-3.5 text-[14px] leading-relaxed',
+    <div className={cn('rounded-xl px-5 py-3.5 text-[14px] leading-relaxed border-s-4',
       tone === 'warn'
-        ? 'bg-amber-50 text-amber-900 dark:bg-amber-500/10 dark:text-amber-200'
-        : 'bg-brand-soft text-content')}>
+        ? 'bg-amber-50 text-amber-900 border-amber-400 dark:bg-amber-500/10 dark:text-amber-200'
+        : 'bg-surface text-content border-brand shadow-[0_0_0_1px_rgb(var(--line))]')}>
       {children}
     </div>
   );

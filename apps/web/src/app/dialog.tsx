@@ -40,7 +40,7 @@ export function DialogHost() {
     set(null);
   };
   const tones = {
-    primary: 'noir-cta text-white',
+    primary: 'noir-cta',
     danger: 'bg-rose-600 hover:bg-rose-700 text-white',
     plain: 'border border-line bg-surface hover:bg-surface-2 text-content',
   };
@@ -48,7 +48,7 @@ export function DialogHost() {
     <Modal open title={request.title} onClose={() => close(null)} size="md"
       footer={request.actions.map((a) => (
         <button key={a.value} type="button" onClick={() => close(a.value)}
-          className={`h-10 px-4 rounded-full text-[14px] font-medium transition-colors ${tones[a.tone ?? 'plain']}`}>
+          className={`h-10 px-4 rounded-[10px] text-[14px] font-medium transition-colors ${tones[a.tone ?? 'plain']}`}>
           {a.label}
         </button>
       ))}>
@@ -56,7 +56,7 @@ export function DialogHost() {
       {request.lines && request.lines.length > 0 && (
         <ul className="mt-3 flex flex-col gap-2">
           {request.lines.map((line) => (
-            <li key={line} className="flex items-start gap-2 text-[13.5px] text-content">
+            <li key={line} className="flex items-start gap-2 text-[13px] text-content">
               <AlertTriangle size={15} className="mt-0.5 shrink-0 text-amber-500" />{line}
             </li>
           ))}

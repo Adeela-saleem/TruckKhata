@@ -108,8 +108,8 @@ export default function SearchPage() {
 function Panel({ title, count, className, children }: { title: string; count?: number; className?: string; children: ReactNode }) {
   return (
     <section className={cn('card min-w-0 overflow-hidden', className)}>
-      <div className="flex items-baseline gap-2 px-6 py-3.5 border-b border-line">
-        <h2 className="card-title font-display text-[18px] text-content">{title}</h2>
+      <div className="flex items-baseline gap-2 px-6 py-4 card-head">
+        <h2 className="card-title font-display text-[16px] text-content">{title}</h2>
         {count !== undefined && <span className="text-[13px] text-content-subtle tabular-nums">{count}</span>}
       </div>
       {children}
@@ -139,7 +139,7 @@ function Row({ cells, onOpen, endFrom }: { cells: ReactNode[]; onOpen: () => voi
     <tr onClick={onOpen} onKeyDown={(e) => { if (e.key === 'Enter') onOpen(); }} tabIndex={0}
       className="noir-row h-[52px] border-b border-line last:border-b-0 cursor-pointer">
       {cells.map((c, i) => (
-        <td key={i} className={cn('px-4 first:ps-6 last:pe-6 text-[14.5px] text-content whitespace-nowrap', i >= endFrom ? 'text-end' : 'text-start')}>{c}</td>
+        <td key={i} className={cn('px-4 first:ps-6 last:pe-6 text-[14px] text-content whitespace-nowrap', i >= endFrom ? 'text-end' : 'text-start')}>{c}</td>
       ))}
     </tr>
   );
@@ -150,15 +150,15 @@ function Loading() {
 }
 
 function None({ text }: { text: string }) {
-  return <p className="px-6 py-8 text-center text-[13.5px] text-content-subtle">{text}</p>;
+  return <p className="px-6 py-8 text-center text-[13px] text-content-subtle">{text}</p>;
 }
 
 function EmptyCard({ title, hint, children }: { title: string; hint?: string; children?: ReactNode }) {
   return (
     <section className="card max-w-[1800px] min-h-[320px] flex flex-col items-center justify-center gap-3 text-center px-6 py-10">
-      <span className="grid place-items-center w-12 h-12 rounded-2xl bg-surface-2 border border-line text-content-subtle"><SearchX size={22} /></span>
+      <span className="grid place-items-center w-12 h-12 rounded-xl bg-surface-2 border border-line text-content-subtle"><SearchX size={22} /></span>
       <div>
-        <p className="text-[15px] font-medium text-content">{title}</p>
+        <p className="text-[14px] font-medium text-content">{title}</p>
         {hint && <p className="text-[13px] text-content-subtle mt-1 max-w-sm">{hint}</p>}
       </div>
       {children}

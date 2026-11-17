@@ -85,7 +85,7 @@ export default function InsuranceForm() {
 
           <FormSection title={t('web.insurance.attachmentSection')} note={t('web.insurance.fileHint')} columns={1}>
             {f.attachment ? (
-              <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-line bg-surface-2 px-4 py-3">
+              <div className="flex flex-wrap items-center gap-3 rounded-xl border border-line bg-surface-2 px-4 py-3">
                 <Paperclip size={16} className="text-content-subtle shrink-0" />
                 <span className="flex-1 min-w-0 truncate text-[14px] text-content" dir="ltr">{fileName ?? t('web.insurance.attached')}</span>
                 <Btn tone="quiet" icon={<Eye size={16} />} onClick={view}>{t('web.insurance.view')}</Btn>
@@ -94,7 +94,7 @@ export default function InsuranceForm() {
             ) : (
               <div className="flex flex-wrap items-center gap-3">
                 <Btn icon={<Paperclip size={16} />} onClick={attach}>{t('actions.chooseFile')}</Btn>
-                <span className="text-[13.5px] text-content-subtle">{t('web.insurance.noFile')}</span>
+                <span className="text-[13px] text-content-subtle">{t('web.insurance.noFile')}</span>
               </div>
             )}
           </FormSection>
@@ -102,8 +102,8 @@ export default function InsuranceForm() {
 
         <aside className="xl:col-span-4 xl:sticky xl:top-5 flex flex-col gap-4">
           <section className="card px-6 py-5">
-            <div className="flex items-baseline justify-between gap-3 border-b border-line pb-3 mb-4">
-              <h2 className="card-title font-display text-[18px] text-content">{t('web.insurance.summaryTitle')}</h2>
+            <div className="flex items-baseline justify-between gap-3 card-head -mx-6 -mt-5 mb-4 px-6 py-4">
+              <h2 className="card-title font-display text-[16px] text-content">{t('web.insurance.summaryTitle')}</h2>
               <span className="text-[13px] text-content-subtle">{t('web.insurance.summaryNote')}</span>
             </div>
             {f.vehicle.trim() && <p dir="ltr" className="font-mono text-[20px] font-semibold text-content mb-3 text-start">{f.vehicle.trim()}</p>}
@@ -115,7 +115,7 @@ export default function InsuranceForm() {
                 </div>
                 <DaysBar expiry={f.expiry} status={status} />
               </div>
-            ) : <p className="text-[13.5px] text-content-subtle">{t('web.insurance.pickDates')}</p>}
+            ) : <p className="text-[13px] text-content-subtle">{t('web.insurance.pickDates')}</p>}
           </section>
           <div className="flex gap-2 justify-end">
             <Btn onClick={() => navigate(-1)}>{t('actions.cancel')}</Btn>

@@ -69,8 +69,8 @@ export default function PartyForm() {
 
         <aside className="xl:col-span-4 xl:sticky xl:top-5 flex flex-col gap-4">
           <section className="card px-6 py-5">
-            <h2 className="card-title font-display text-[18px] text-content border-b border-line pb-3 mb-3">{t('modules.parties')}</h2>
-            <p className="text-[13.5px] text-content-muted leading-relaxed">{t('web.parties.formNote')}</p>
+            <h2 className="card-title font-display text-[16px] text-content card-head -mx-6 -mt-5 mb-4 px-6 py-4">{t('modules.parties')}</h2>
+            <p className="text-[13px] text-content-muted leading-relaxed">{t('web.parties.formNote')}</p>
           </section>
           <div className="flex gap-2 justify-end">
             <Btn onClick={() => navigate(-1)}>{t('actions.cancel')}</Btn>

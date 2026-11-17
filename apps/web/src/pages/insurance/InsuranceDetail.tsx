@@ -58,7 +58,6 @@ export default function InsuranceDetail() {
       </>}>
       <div className="max-w-[1800px]">
         <RecordHeader
-          title={<span dir="ltr" className="font-mono text-[24px] font-semibold text-content">{i.vehicle}</span>}
           badges={<>
             <InsuranceBadge status={i.status} />
             {i.archived_at && <Badge>{t('party.archived')}</Badge>}
@@ -80,7 +79,7 @@ export default function InsuranceDetail() {
               {i.notes && (
                 <div className="mt-5 pt-4 border-t border-line">
                   <p className="text-[13px] text-content-subtle">{t('fields.notes')}</p>
-                  <p className="mt-1 text-[14.5px] text-content whitespace-pre-line">{i.notes}</p>
+                  <p className="mt-1 text-[14px] text-content whitespace-pre-line">{i.notes}</p>
                 </div>
               )}
             </SectionCard>
@@ -107,7 +106,7 @@ export default function InsuranceDetail() {
                           <span className="w-24 tabular-nums text-[14px] text-content-muted">{formatDate(c.date)}</span>
                           <span className="flex-1 min-w-[120px] truncate text-[14px] text-content-muted">{c.route || '–'}</span>
                           <StatusBadge status={c.summary.status} />
-                          <Money value={c.summary.profit} tone="auto" className="w-28 text-end text-[14.5px] font-medium" />
+                          <Money value={c.summary.profit} tone="auto" className="w-28 text-end text-[14px] font-medium" />
                         </Link>
                       </li>
                     ))}
@@ -125,10 +124,10 @@ export default function InsuranceDetail() {
                 <InsuranceBadge status={i.status} />
                 <span className="text-[13px] text-content-subtle tabular-nums">{formatDate(i.expiry_date)}</span>
               </div>
-              <p className={`mt-4 font-display text-[30px] leading-none font-semibold tracking-[-0.02em] tabular-nums ${statusText(i.status) || 'text-content'}`}>
+              <p className={`mt-4 font-display text-[28px] leading-none font-semibold tracking-[-0.02em] tabular-nums ${statusText(i.status) || 'text-content'}`}>
                 {left > 0 ? left : left === 0 ? t('web.insurance.today') : -left}
               </p>
-              <p className="mt-1.5 text-[13.5px] text-content-muted">{left > 0 ? t('web.insurance.daysLeft') : daysText(i.expiry_date, t, true)}</p>
+              <p className="mt-1.5 text-[13px] text-content-muted">{left > 0 ? t('web.insurance.daysLeft') : daysText(i.expiry_date, t, true)}</p>
               <div className="mt-4"><DaysBar expiry={i.expiry_date} status={i.status} /></div>
               <div className="mt-5"><Note>{t('insurance.renewHint')}</Note></div>
             </SectionCard>
