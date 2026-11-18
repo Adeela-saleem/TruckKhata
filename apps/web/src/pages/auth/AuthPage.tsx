@@ -85,7 +85,7 @@ export default function AuthPage({ mode }: { mode: 'signin' | 'signup' }) {
 
       <div className="relative w-full max-w-[420px]">
         <div className="flex items-center justify-center gap-3 mb-6 text-white">
-          <span className="w-11 h-11 rounded-[14px] bg-white grid place-items-center shadow-[0_10px_30px_-12px_rgba(0,0,0,0.4)]"><Mark size={34} /></span>
+          <Mark size={44} />
           <span className="font-display text-[20px] tracking-[-0.02em]">Truck Khata</span>
         </div>
 

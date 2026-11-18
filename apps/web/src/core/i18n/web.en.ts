@@ -1,3 +1,4 @@
+import { landingEn } from './web/landing.en';
 import { authEn } from './web/auth.en';
 import { partiesEn } from './web/parties.en';
 import { tripsEn } from './web/trips.en';
@@ -123,6 +124,7 @@ export const webEn = {
   },
   parties: partiesEn, trips: tripsEn, bills: billsEn, insurance: insuranceEn, reports: reportsEn, settings: settingsEn,
   auth: authEn,
+  landing: landingEn,
   saved: 'Saved',
   notFound: 'This record no longer exists',
   backToList: 'Back to list',

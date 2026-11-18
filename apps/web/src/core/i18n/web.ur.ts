@@ -1,3 +1,4 @@
+import { landingUr } from './web/landing.ur';
 import type { webEn } from './web.en';
 import { authUr } from './web/auth.ur';
 import { partiesUr } from './web/parties.ur';
@@ -124,6 +125,7 @@ export const webUr: typeof webEn = {
   },
   parties: partiesUr, trips: tripsUr, bills: billsUr, insurance: insuranceUr, reports: reportsUr, settings: settingsUr,
   auth: authUr,
+  landing: landingUr,
   saved: 'محفوظ ہو گیا',
   notFound: 'یہ ریکارڈ اب موجود نہیں',
   backToList: 'فہرست پر واپس',

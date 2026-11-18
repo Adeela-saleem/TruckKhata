@@ -10,6 +10,7 @@ import { Shell, type NavGroup } from './ui/Shell';
 import { AuthProvider, useAuth } from './app/auth';
 import AuthPage from './pages/auth/AuthPage';
 import Dashboard from './pages/Dashboard';
+import Landing from './pages/Landing';
 
 const AdaList = lazy(() => import('./pages/ada/AdaList'));
 const ReceiptList = lazy(() => import('./pages/ada/ReceiptList'));
@@ -119,7 +120,7 @@ function Splash({ error }: { error?: unknown }) {
   );
 }
 
-/** Signed out: only the sign in and sign up pages. Signed in: the app. */
+/** Signed out: the landing page, sign in and sign up. Signed in: the app, and the landing page at /welcome. */
 function Gate() {
   const { user, ready } = useAuth();
   const location = useLocation();
@@ -129,11 +130,14 @@ function Gate() {
       <Routes>
         <Route path="/login" element={<AuthPage mode="signin" />} />
         <Route path="/signup" element={<AuthPage mode="signup" />} />
+        <Route path="/" element={<Landing />} />
+        <Route path="/welcome" element={<Landing />} />
         <Route path="*" element={<Navigate to="/login" replace state={{ from: location.pathname }} />} />
       </Routes>
     );
   }
   if (location.pathname === '/login' || location.pathname === '/signup') return <Navigate to="/" replace />;
+  if (location.pathname === '/welcome') return <Landing />;
   return <AppFrame />;
 }
 
