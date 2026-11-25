@@ -11,7 +11,7 @@ import { settingsUr } from './web/settings.ur';
 
 export const webUr: typeof webEn = {
   dashboard: 'ڈیش بورڈ',
-  printPdf: 'پرنٹ یا پی ڈی ایف',
+  printPdf: 'پی ڈی ایف ڈاؤن لوڈ کریں',
   excel: 'ایکسل',
   listPdf: 'اس فہرست کی پی ڈی ایف',
   shell: { addNew: 'نیا شامل کریں', addAda: 'نئی اڈا انٹری', addTrip: 'نیا ٹرپ', addBill: 'نیا بل', addParty: 'نیا بروکر', addInsurance: 'نئی انشورنس', menu: 'مینو کھولیں', main: 'مرکزی مینو', parties: 'بروکرز', trips: 'ٹرپ', insurance: 'انشورنس' },

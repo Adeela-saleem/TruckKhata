@@ -10,7 +10,7 @@ import { settingsEn } from './web/settings.en';
 /** Text added for the web app. Every key here also needs its Urdu line in web.ur.ts. */
 export const webEn = {
   dashboard: 'Dashboard',
-  printPdf: 'Print or PDF',
+  printPdf: 'Download PDF',
   excel: 'Excel',
   listPdf: 'PDF of this list',
   shell: { addNew: 'Add new', addAda: 'New Ada entry', addTrip: 'New trip', addBill: 'New bill', addParty: 'New broker', addInsurance: 'New insurance', menu: 'Open menu', main: 'Main menu', parties: 'Brokers', trips: 'Trips', insurance: 'Insurance' },

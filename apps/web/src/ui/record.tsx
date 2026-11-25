@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronDown, FileDown, Printer, Trash2 } from 'lucide-react';
+import { ChevronDown, FileDown, Trash2 } from 'lucide-react';
 import { formatDate } from '../core/domain/dates';
 import { formatPKR } from '../core/domain/money';
 import type { PrintDocument, PrintSection } from '../core/print/html';
@@ -10,10 +10,7 @@ import { useDialog } from '../app/dialog';
 import { printDocument } from '../platform/print';
 import { Btn } from './bits';
 
-/**
- * Builds a document and opens the print dialog. Choosing "Save as PDF" there gives the PDF,
- * with the company header and watermark on every page.
- */
+/** Builds a document and downloads it as a PDF, with the company header and watermark on every page. */
 export function usePrint() {
   const { db, lang, t } = useApp();
   const { showError } = useDialog();
@@ -36,7 +33,7 @@ export function usePrint() {
 export function PrintButton({ build, label }: { build: () => Promise<PrintDocument> | PrintDocument; label?: string }) {
   const { t } = useApp();
   const { print, busy } = usePrint();
-  return <Btn icon={<Printer size={16} />} disabled={busy} onClick={() => print(build)}>{label ?? t('web.printPdf')}</Btn>;
+  return <Btn icon={<FileDown size={16} />} disabled={busy} onClick={() => print(build)}>{label ?? t('web.printPdf')}</Btn>;
 }
 
 /** Warns about linked effects, then moves the record to the Recycle Bin. */

@@ -3,7 +3,7 @@ import { formatPKR } from '../domain/money';
 import type { Translate } from '../i18n';
 import type { AdaView, Receipt } from '../repo/ada';
 import type { BillView } from '../repo/bills';
-import { sheetExpenseRows, sheetHeader, sheetTotals, type CaseView, type SheetHeader } from '../repo/cases';
+import { sheetExpenseRows, sheetHeader, sheetTotals, type CaseView } from '../repo/cases';
 import type { InsuranceView } from '../repo/insurance';
 import type { PartyAccount, PartyTotals } from '../repo/parties';
 import type { PrintDocument, PrintSection } from './html';
@@ -35,43 +35,78 @@ export function adaDocument(a: AdaView, receipts: Receipt[], t: Translate): Prin
   return { title: t('modules.ada'), subtitle: `${t('fields.caseNo')}: ${a.case_no}  |  ${t(`direction.${a.direction}`)}`, sections };
 }
 
+/** Places joined in travel order, a place repeated back to back shown once. */
+function routeLine(places: (string | null | undefined)[]): string | null {
+  const out: string[] = [];
+  for (const p of places) {
+    const name = p?.trim();
+    if (name && name.toLowerCase() !== out[out.length - 1]?.toLowerCase()) out.push(name);
+  }
+  return out.length ? out.join(' → ') : null;
+}
+
 /**
- * Laid out like the company's paper trip sheet: V# and Case #, from and to with dates, broker,
- * market and return with weight and freight, then every expense line, then total, freight and profit.
+ * The trip sheet for the whole trip (going and return): V# and Case # once, the full route on one
+ * line, each broker with its freight on the right, one two-column expense table with only the
+ * expenses actually saved, then Total Freight, Total Expenses and Net Profit for the whole trip.
  */
 export function caseDocument(v: CaseView, t: Translate): PrintDocument {
   const h = sheetHeader(v);
   const out = v.adaOutward[0];
   const ret = v.adaReturn[0];
-  const returnBroker = v.returnLeg?.party_name ?? ret?.party_name ?? null;
-  const load = (l: SheetHeader['market']) => (l ? [l.weight, formatPKR(l.freight)] : [t('trip.notAddedShort'), null]);
-  const sections: PrintSection[] = [
-    { type: 'grid', numeric: [2], rows: [
-      [t('fields.caseNo'), v.caseRow.case_no, t(`status.${v.summary.status}`)],
-      [t('fields.from'), h.from, formatDate(v.outward?.trip_date ?? out?.entry_date ?? null)],
-      [t('fields.to'), h.to, formatDate(v.returnLeg?.trip_date ?? ret?.entry_date ?? null)],
-      [t('fields.broker'), h.broker, returnBroker && returnBroker !== h.broker ? returnBroker : null],
-      [t('trip.market'), ...load(h.market)],
-      [t('trip.returnLoad'), ...load(h.returnLoad)],
-    ] },
-    { type: 'table', title: t('trip.expenses'), numeric: [3, 4, 5],
-      head: [t('trip.expenses'), t('report.dieselStation'), t('fields.slipNo'), t('fields.litres'), t('fields.amount'), t('fields.rate')],
-      rows: sheetExpenseRows(v, t('modules.bills')).map((r) => [
-        r.category ?? t(`expenseType.${r.typeKey}`), r.station, r.slipNo, r.litres,
-        r.amount === null ? null : formatPKR(r.amount), r.rate === null ? null : formatPKR(r.rate),
-      ]),
-    },
-  ];
   const st = sheetTotals(v);
-  const profitLabel = `${t('fields.profit')} (${t(v.summary.confirmed ? 'trip.confirmed' : 'trip.provisional')})`;
-  const totals: [string, string][] = [
-    [t('trip.outwardFreight'), formatPKR(st.outwardFreight)], [t('trip.returnFreight'), formatPKR(st.returnFreight)],
-    [t('fields.total'), formatPKR(st.expenses)], [t('trip.cycleFreight'), formatPKR(st.freight)],
+  const outwardDate = v.outward?.trip_date ?? out?.entry_date ?? null;
+  const returnDate = v.returnLeg?.trip_date ?? ret?.entry_date ?? null;
+  const dates = [outwardDate, returnDate].filter((d): d is string => d !== null).map(formatDate);
+  const route = routeLine([
+    v.outward?.from_place ?? out?.from_place, v.outward?.to_place ?? out?.to_place,
+    v.returnLeg?.from_place ?? ret?.from_place, v.returnLeg?.to_place ?? ret?.to_place,
+  ]);
+  const outwardBroker = v.outward?.party_name ?? out?.party_name ?? (v.returnLeg || ret ? null : h.broker);
+  const returnBroker = v.returnLeg?.party_name ?? ret?.party_name ?? null;
+  const hasReturn = v.returnLeg !== null || v.adaReturn.length > 0;
+
+  const header: (string | null)[][] = [
+    [t('report.vehicleLabel'), h.vehicle ?? '–', dates.length ? `\u2066${[...new Set(dates)].join(' – ')}\u2069` : null],
+    [t('fields.caseNo'), v.caseRow.case_no, t(`status.${v.summary.status}`)],
+    [t('fields.route'), route ?? '–', null],
+    [t('trip.outwardBroker'), outwardBroker ?? '–', formatPKR(st.outwardFreight)],
   ];
-  if (v.ada.length) totals.push([t('trip.received'), formatPKR(st.received)], [t('trip.balance'), formatPKR(st.balance)]);
-  totals.push([profitLabel, formatPKR(st.profit)]);
-  sections.push({ type: 'totals', totals });
-  return { title: t('trip.sheet'), subtitle: `${t('report.vehicleLabel')}: ${h.vehicle ?? '–'}`, sections };
+  if (hasReturn || st.returnFreight) header.push([t('trip.returnBroker'), returnBroker ?? '–', formatPKR(st.returnFreight)]);
+
+  // Only expenses actually saved; diesel and oil carry their slip details on a second line.
+  const expenseRows = sheetExpenseRows(v, t('modules.bills')).filter((r) => r.amount !== null).map((r) => {
+    const name = r.category ?? t(`expenseType.${r.typeKey}`);
+    let label = name;
+    if (r.typeKey === 'diesel' || r.typeKey === 'oil') {
+      const details = [
+        r.station && `${t('fields.station')}: ${r.station}`,
+        r.slipNo && `${t('fields.slipNo')}: ${r.slipNo}`,
+        r.litres && `${t('fields.litres')}: ${r.litres}`,
+        r.rate !== null && `${t('fields.rate')}: ${formatPKR(r.rate)}`,
+      ].filter(Boolean).join('  ·  ');
+      if (details) label = `${name}\n${details}`;
+    } else if (r.typeKey === null && r.category === t('modules.bills') && r.station) {
+      label = `${name}: ${r.station}`;
+    }
+    return [label, formatPKR(r.amount ?? 0)];
+  });
+
+  const totalFreight = st.outwardFreight + st.returnFreight;
+  const sections: PrintSection[] = [
+    { type: 'grid', numeric: [2], rows: header },
+    { type: 'table', title: t('trip.expenses'), numeric: [1], details: true,
+      head: [t('trip.expenseDescription'), t('fields.amount')],
+      rows: expenseRows.length ? expenseRows : [[t('trip.noExpenses'), null]],
+      foot: [t('fields.totalExpenses'), formatPKR(st.expenses)],
+    },
+    { type: 'totals', totals: [
+      [t('fields.totalFreight'), formatPKR(totalFreight)],
+      [t('fields.totalExpenses'), formatPKR(st.expenses)],
+      [t('trip.netProfit'), formatPKR(totalFreight - st.expenses)],
+    ] },
+  ];
+  return { title: t('trip.sheet'), sections, fileName: `${t('trip.sheet')} - ${t('fields.caseNo')} ${v.caseRow.case_no}${h.vehicle ? ` - ${h.vehicle}` : ''}` };
 }
 
 export function partyDocument(account: PartyAccount, t: Translate, subtitle?: string): PrintDocument {

@@ -12,7 +12,7 @@ export const partiesUr: typeof partiesEn = {
   details: 'رابطے کی تفصیل',
   formNote: 'جب آپ اڈا اندراج میں نئے بروکر کا نام محفوظ کرتے ہیں تو بروکر خود بخود بھی شامل ہو جاتا ہے۔',
   openExisting: '{{name}} کھولیں',
-  printStatement: 'کھاتہ پرنٹ کریں',
+  printStatement: 'کھاتہ پی ڈی ایف',
   recordPayment: 'ادائیگی درج کریں',
   entryEdit: 'دستی اندراج میں تبدیلی',
   kindPayment: 'وصول شدہ ادائیگی',

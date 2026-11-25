@@ -11,7 +11,7 @@ export const partiesEn = {
   details: 'Contact details',
   formNote: 'Brokers are also added on their own when you save an Ada entry with a new broker name.',
   openExisting: 'Open {{name}}',
-  printStatement: 'Print statement',
+  printStatement: 'Statement PDF',
   recordPayment: 'Record payment',
   entryEdit: 'Edit manual entry',
   kindPayment: 'Payment received',

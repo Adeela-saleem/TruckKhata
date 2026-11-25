@@ -6,7 +6,8 @@ import type { ReportResult } from '../repo/reports';
 
 export type PrintSection =
   | { type: 'pairs'; title?: string; pairs: [string, string | null | undefined][] }
-  | { type: 'table'; title?: string; head: string[]; rows: (string | null)[][]; numeric?: number[]; foot?: (string | null)[]; nowrap?: number[] }
+  /** With `details`, lines after the first in a cell print smaller underneath (e.g. diesel slip details). */
+  | { type: 'table'; title?: string; head: string[]; rows: (string | null)[][]; numeric?: number[]; foot?: (string | null)[]; nowrap?: number[]; details?: boolean }
   /** A ruled sheet without a header row: label in the first column, values after it. */
   | { type: 'grid'; title?: string; rows: (string | null)[][]; numeric?: number[] }
   /** Totals sit in a box at the bottom right, as written under a paper sheet; the last line is the result. */
@@ -14,7 +15,7 @@ export type PrintSection =
   | { type: 'note'; text: string };
 
 /** Wide tables, such as the monthly vehicle sheet, print on a landscape page. */
-export type PrintDocument = { title: string; subtitle?: string; sections: PrintSection[]; landscape?: boolean };
+export type PrintDocument = { title: string; subtitle?: string; sections: PrintSection[]; landscape?: boolean; fileName?: string };
 
 export type PrintFonts = { latin?: string; latinBold?: string; urdu?: string; urduBold?: string };
 
@@ -38,7 +39,13 @@ function section(s: PrintSection): string {
   const num = new Set(s.numeric ?? []);
   const keep = new Set(s.type === 'table' ? s.nowrap ?? [] : []);
   const cls = (i: number) => [num.has(i) ? 'n' : '', keep.has(i) ? 'nw' : ''].join(' ').trim();
-  const cells = (r: (string | null)[], tag: 'td' | 'th' = 'td') => r.map((c, i) => `<${tag} class="${cls(i)}">${esc(c)}</${tag}>`).join('');
+  const detailed = s.type === 'table' && s.details;
+  const text = (c: string | null) => {
+    if (!detailed || !c?.includes('\n')) return esc(c);
+    const [first, ...rest] = c.split('\n');
+    return `${esc(first)}${rest.filter(Boolean).map((l) => `<div class="sub">${esc(l)}</div>`).join('')}`;
+  };
+  const cells = (r: (string | null)[], tag: 'td' | 'th' = 'td') => r.map((c, i) => `<${tag} class="${cls(i)}">${text(c)}</${tag}>`).join('');
   if (s.type === 'grid') {
     return `<section>${title}<table class="grid"><tbody>${s.rows.map((r) => `<tr>${cells(r)}</tr>`).join('')}</tbody></table></section>`;
   }
@@ -91,6 +98,9 @@ table.grid td { padding: 3.5pt 5pt; border: 0.75pt solid #8E939E; }
 table.grid td:first-child { font-weight: 700; text-transform: uppercase; background: #EEEFF2; width: 22%; }
 .n { text-align: end; white-space: nowrap; }
 .nw { white-space: nowrap; }
+/* Spacing letters apart breaks joined Urdu script. */
+[dir=rtl] h2, [dir=rtl] th, [dir=rtl] .k { letter-spacing: 0; }
+.sub { font-size: 8.5pt; color: #4B5165; margin-top: 1pt; }
 .totals-wrap { display: flex; flex-direction: column; align-items: flex-end; break-inside: avoid; }
 table.totals { width: 46%; min-width: 220pt; margin-top: 10pt; }
 table.totals th { text-align: start; text-transform: uppercase; font-weight: 700; font-size: 9.5pt; padding: 3.5pt 6pt; border: 0.75pt solid #8E939E; background: #EEEFF2; }
